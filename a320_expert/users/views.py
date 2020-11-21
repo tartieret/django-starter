@@ -21,10 +21,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     fields = ["name"]
 
     def get_success_url(self):
-        return reverse("users:detail", args[self.request.user])
+        return reverse("users:detail", args=[self.request.user.id])
 
     def get_object(self):
-        return User.objects.get(email=self.request.user.email)
+        return User.objects.get(id=self.request.user.id)
 
     def form_valid(self, form):
         messages.add_message(
@@ -41,7 +41,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self):
-        return reverse("users:detail", args[self.request.user])
+        return reverse("users:detail", args=[self.request.user.id])
 
 
 user_redirect_view = UserRedirectView.as_view()

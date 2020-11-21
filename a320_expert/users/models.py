@@ -48,7 +48,6 @@ GENDER = [
 LANGUAGES = [("en-us", "English (US)")]
 
 
-
 class User(AbstractUser):
     """Default user for A320 Expert."""
 
@@ -93,7 +92,7 @@ class User(AbstractUser):
             str: URL for user detail.
 
         """
-        return reverse("users:detail", args[self.request.user])
+        return reverse("users:detail", args=[self.request.user.id])
 
     def __str__(self):
         return self.email
