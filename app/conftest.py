@@ -1,7 +1,7 @@
 import pytest
 
-from a320_expert.users.models import User
-from a320_expert.users.tests.factories import UserFactory
+from app.users.models import User
+from app.users.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)

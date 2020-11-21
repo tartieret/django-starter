@@ -1,6 +1,6 @@
 import pytest
 
-from a320_expert.users.models import User
+from app.users.models import User
 
 pytestmark = pytest.mark.django_db
 

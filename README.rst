@@ -39,7 +39,7 @@ Running type checks with mypy:
 
 ::
 
-  $ mypy a320_expert
+  $ mypy app
 
 Test coverage
 ^^^^^^^^^^^^^

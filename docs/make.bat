@@ -10,7 +10,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=_source
 set BUILDDIR=_build
-set APP=..\a320_expert
+set APP=..\app
 
 if "%1" == "" goto help
 

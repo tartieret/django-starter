@@ -3,7 +3,7 @@ from django.contrib.auth import forms as auth_forms, get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from a320_expert.users.models import GENDER
+from app.users.models import GENDER
 
 
 User = get_user_model()
@@ -47,4 +47,3 @@ class UserCreationForm(auth_forms.UserCreationForm):
             return email
 
         raise ValidationError(self.error_messages["duplicate_email"])
-

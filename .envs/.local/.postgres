@@ -2,6 +2,6 @@
 # ------------------------------------------------------------------------------
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
-POSTGRES_DB=a320_expert
+POSTGRES_DB=app
 POSTGRES_USER=dNjWvcQKYrFbpOweZXiWFkKcqohoYTng
 POSTGRES_PASSWORD=gTQFRN5bnrp5wGY807f10xDSjBnP8atbeEMbpT6NKuNIA5Es8SpgnvPhXvT5NEzx

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   production_postgres_data: {}
@@ -10,7 +10,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-    image: a320_expert_production_django
+    image: app_production_django
     depends_on:
       - postgres
       - redis
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: a320_expert_production_postgres
+    image: app_production_postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data:Z
       - production_postgres_data_backups:/backups:z
@@ -34,7 +34,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/traefik/Dockerfile
-    image: a320_expert_production_traefik
+    image: app_production_traefik
     depends_on:
       - django
     volumes:
@@ -45,5 +45,3 @@ services:
 
   redis:
     image: redis:5.0
-
-  

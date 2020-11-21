@@ -6,8 +6,8 @@ from pathlib import Path
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# a320_expert/
-APPS_DIR = ROOT_DIR / "a320_expert"
+# app/
+APPS_DIR = ROOT_DIR / "app"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
@@ -74,7 +74,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "a320_expert.users.apps.UsersConfig",
+    "app.users.apps.UsersConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -83,7 +83,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-MIGRATION_MODULES = {"sites": "a320_expert.contrib.sites.migrations"}
+MIGRATION_MODULES = {"sites": "app.contrib.sites.migrations"}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "a320_expert.utils.context_processors.settings_context",
+                "app.utils.context_processors.settings_context",
             ],
         },
     }
@@ -263,8 +263,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_ADAPTER = "a320_expert.users.adapters.AccountAdapter"
-SOCIALACCOUNT_ADAPTER = "a320_expert.users.adapters.SocialAccountAdapter"
+ACCOUNT_ADAPTER = "app.users.adapters.AccountAdapter"
+SOCIALACCOUNT_ADAPTER = "app.users.adapters.SocialAccountAdapter"
 
 # django-compressor
 # ------------------------------------------------------------------------------

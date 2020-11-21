@@ -1,6 +1,6 @@
 from django.urls import path
 
-from a320_expert.users.views import (
+from app.users.views import (
     user_detail_view,
     user_redirect_view,
     user_update_view,

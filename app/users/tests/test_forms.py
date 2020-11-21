@@ -1,7 +1,7 @@
 import pytest
 
-from a320_expert.users.forms import UserCreationForm
-from a320_expert.users.tests.factories import UserFactory
+from app.users.forms import UserCreationForm
+from app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 
