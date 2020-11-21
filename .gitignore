@@ -1,3 +1,16 @@
+## VisualStudioCode ###
+.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -62,10 +75,12 @@ target/
 # pyenv
 .python-version
 
-
+# celery beat schedule file
+celerybeat-schedule
 
 # Environments
 .venv
+.venv/
 venv/
 ENV/
 
@@ -264,9 +279,10 @@ Session.vim
 # Auto-generated tag files
 tags
 
+
 ### Project template
 
-a320_expert/media/
+logbook/media/
 
 .pytest_cache/
 
@@ -274,3 +290,4 @@ a320_expert/media/
 .ipython/
 .env
 .envs/*
+!.envs/.local/
