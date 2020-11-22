@@ -131,6 +131,7 @@ class Quiz(models.Model):
     class Meta:
         verbose_name = _("Quiz")
         verbose_name_plural = _("Quizzes")
+        ordering = ["title"]
 
     def __str__(self):
         return self.title

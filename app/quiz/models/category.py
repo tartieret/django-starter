@@ -23,6 +23,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
+        ordering = ["category"]
 
     def __str__(self):
         return self.category
@@ -47,6 +48,7 @@ class SubCategory(models.Model):
     class Meta:
         verbose_name = _("Sub-Category")
         verbose_name_plural = _("Sub-Categories")
+        ordering = ["sub_category"]
 
     def __str__(self):
         return self.sub_category + " (" + self.category.category + ")"
