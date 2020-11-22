@@ -92,7 +92,7 @@ class User(AbstractUser):
             str: URL for user detail.
 
         """
-        return reverse("users:detail", args=[self.request.user.id])
+        return reverse("users:detail", args=[self.id])
 
     def __str__(self):
         return self.email
