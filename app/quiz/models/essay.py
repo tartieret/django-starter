@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 
-from .quiz import Question
+from .question import Question
 
 
 class Essay_Question(Question):

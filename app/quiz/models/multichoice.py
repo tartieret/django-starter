@@ -1,7 +1,7 @@
 from django.db import models
-from .quiz import Question
 from django.utils.translation import ugettext_lazy as _
 
+from .question import Question
 
 ANSWER_ORDER_OPTIONS = (
     ("content", _("Content")),
