@@ -10,23 +10,8 @@ User = get_user_model()
 
 
 class UserChangeForm(auth_forms.UserChangeForm):
-
-    error_messages = {"duplicate_email": _("This email has already been taken.")}
-
-    gender = forms.ChoiceField(choices=GENDER, widget=forms.RadioSelect())
-
-    class Meta:
+    class Meta(auth_forms.UserChangeForm.Meta):
         model = User
-        fields = ["name", "email", "gender", "language"]
-
-    def clean_email(self):
-        email = self.cleaned_data["email"]
-        try:
-            User.objects.get(email=email)
-        except User.DoesNotExist:
-            return email
-
-        raise ValidationError(self.error_messages["duplicate_email"])
 
 
 class UserCreationForm(auth_forms.UserCreationForm):
