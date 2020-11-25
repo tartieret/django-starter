@@ -1,43 +1,75 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load static i18n compress%}
 {% block title %}{% trans "All Quizzes" %}{% endblock %}
 
 {% block content %}
-<h2>{% trans "List of quizzes" %}</h2>
-    {% if quiz_list %}
-		<table class="table table-bordered table-striped">
 
-		  <thead>
-			<tr>
-			  <th>{% trans "Title" %}</th>
-			  <th>{% trans "Category" %}</th>
-			  <th>{% trans "Exam" %}</th>
-			  <th>{% trans "Single attempt" %}</th>
-			  <th></th>
-			</tr>
-		  </thead>
+<!-- ========== MAIN ========== -->
+<main id="content" role="main">
 
-		  <tbody>
+    <!-- Hero Section -->
+    <div class="position-relative">
+      <div class="bg-img-hero" style="background-image: url({% static 'svg/components/abstract-shapes-12.svg'%});">
+        <div class="container space-top-3 space-top-lg-2 space-bottom-1 position-relative z-index-2">
+          <div class="w-md-80 w-lg-60 text-center mx-md-auto mb-5 mb-md-9">
+            <h1>{% trans "List of quizzes" %}</h1>
+          </div>
 
-        {% for quiz in quiz_list %}
+        </div>
+      </div>
 
-  			<tr>
-			  <td>{{ quiz.title }}</td>
-			  <td>{{ quiz.category }}</td>
-			  <td>{{ quiz.exam_paper }}</td>
-			  <td>{{ quiz.single_attempt }}</td>
-			  <td>
-				<a href="{% url 'quiz:quiz_start_page' slug=quiz.url %}">
-				  {% trans "View details" %}
-				</a>
-			</tr>
+      <!-- SVG Shape -->
+      <figure class="position-absolute bottom-0 right-0 left-0">
+        <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1921 273">
+          <polygon fill="#fff" points="0,273 1921,273 1921,0 "/>
+        </svg>
+      </figure>
+      <!-- End SVG Shape -->
+    </div>
+    <!-- End Hero Section -->
 
-        {% endfor %}
-		  </tbody>
+    <div class="container space-bottom-3">
+      <div class="mx-auto">
 
-		</table>
+      {% if quiz_list %}
+        <table class="table table-bordered table-striped">
 
-	{% else %}
-        <p>{% trans "There are no available quizzes" %}.</p>
-    {% endif %}
+          <thead>
+          <tr>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th>{% trans "Exam" %}</th>
+            <th>{% trans "Single attempt" %}</th>
+            <th></th>
+          </tr>
+          </thead>
+
+          <tbody>
+
+            {% for quiz in quiz_list %}
+
+            <tr>
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.category }}</td>
+            <td>{{ quiz.exam_paper }}</td>
+            <td>{{ quiz.single_attempt }}</td>
+            <td>
+            <a href="{% url 'quiz:quiz_start_page' slug=quiz.url %}">
+              {% trans "View details" %}
+            </a>
+          </tr>
+
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      {% else %}
+          <p>{% trans "There are no available quizzes" %}.</p>
+      {% endif %}
+
+      </div>
+
+  </div>
+</main>
 {% endblock %}

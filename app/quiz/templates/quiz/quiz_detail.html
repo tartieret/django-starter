@@ -1,19 +1,52 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load static i18n compress%}
 {% block title %}
 {{ quiz.title }}
 {% endblock %}
 
+
 {% block content %}
-<h2>{{ quiz.title }}</h2>
-<h3>{% trans "Category" %}: {{ quiz.category }}</h3>
-{% if quiz.single_attempt %}
-  <h4>{% trans "You will only get one attempt at this quiz" %}.</h4>
-{% endif %}
-<p>{{ quiz.description }}</p>
-<p>
-  <a href="{% url 'quiz:quiz_question' quiz_name=quiz.url %}">
-	{% trans "Start quiz" %}
-  </a>
-</p>
+
+<!-- ========== MAIN ========== -->
+<main id="content" role="main">
+
+    <!-- Hero Section -->
+    <div class="position-relative">
+      <div class="bg-img-hero" style="background-image: url({% static 'svg/components/abstract-shapes-12.svg'%});">
+        <div class="container space-top-3 space-top-lg-2 space-bottom-1 position-relative z-index-2">
+          <div class="w-md-80 w-lg-60 text-center mx-md-auto mb-5 mb-md-9">
+            <h1>{{ quiz.title }}</h1>
+            <p>{% trans "Category" %}: {{ quiz.category }}</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SVG Shape -->
+      <figure class="position-absolute bottom-0 right-0 left-0">
+        <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1921 273">
+          <polygon fill="#fff" points="0,273 1921,273 1921,0 "/>
+        </svg>
+      </figure>
+      <!-- End SVG Shape -->
+    </div>
+    <!-- End Hero Section -->
+
+    <div class="container space-bottom-3">
+      <div class="mx-auto">
+
+        {% if quiz.single_attempt %}
+          <h4>{% trans "You will only get one attempt at this quiz" %}.</h4>
+        {% endif %}
+        <p>{{ quiz.description }}</p>
+        <div class="row align-items-center mb-5">
+        <div class="col text-sm-center">
+          <a href="{% url 'quiz:quiz_question' quiz_name=quiz.url %}" class="btn btn-primary">
+          {% trans "Start quiz" %}
+          </a>
+          </div>
+        </div>
+      </div>
+  </div>
+</main>
 {% endblock %}

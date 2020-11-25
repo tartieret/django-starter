@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% load i18n%}
+{% extends 'base.html' %}
+{% load static i18n compress%}
 
 {% load quiz_tags %}
 
@@ -8,75 +8,104 @@
 
 {% block content %}
 
-{% if previous.answers %}
+<!-- ========== MAIN ========== -->
+<main id="content" role="main">
 
-  <p class="muted"><small>{% trans "The previous question" %}:</small></p>
-  <p>{{ previous.previous_question }}</p>
+    <!-- Hero Section -->
+    <div class="position-relative">
+      <div class="bg-img-hero" style="background-image: url({% static 'svg/components/abstract-shapes-12.svg'%});">
+        <div class="container space-top-2 space-top-lg-1 position-relative z-index-2">
+          <div class="w-md-80 w-lg-60 text-center mx-md-auto mb-5 mb-md-9">
+            {% if question %}
+              <h1>{{ quiz.title }}</h1>
+              <p>
+               {% if progress %}
+                {% trans "Question" %} {{ progress.0|add:1 }} {% trans "of" %} {{ progress.1 }}
+                {% endif %}
+              </p>
+            {% endif %}
+          </div>
 
-  {% if previous.previous_outcome %}
-	<div class="alert alert-success">
-  {% else %}
-	<div class="alert alert-warning">
-  {% endif %}
-  	  <p><small>
-		{% trans "Your answer was" %} </small>
-		<strong>
-		  {{ previous.previous_outcome|yesno:"correct,incorrect" }}
-		</strong>
-	  </p>
+        </div>
+      </div>
 
-	</div>
+      <!-- SVG Shape -->
+      <figure class="position-absolute bottom-0 right-0 left-0">
+        <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1921 273">
+          <polygon fill="#fff" points="0,273 1921,273 1921,0 "/>
+        </svg>
+      </figure>
+      <!-- End SVG Shape -->
+    </div>
+    <!-- End Hero Section -->
 
-	{% include 'correct_answer.html' %}
+    <!-- Content -->
+    <div class="container space-bottom-3">
+      <div class="col-sm-12 col-md-10 mx-auto">
 
-	<p><strong>{% trans "Explanation" %}:</strong></p>
-	<div class="well " style="background-color: #fcf8e3;">
-	  <p>{{ previous.previous_question.explanation }}</p>
-	</div>
+        {% if previous.answers %}
 
-	<hr>
+          <p class="muted"><small>{% trans "The previous question" %}:</small></p>
+          <p>{{ previous.previous_question }}</p>
 
-{% endif %}
+          {% if previous.previous_outcome %}
+          <div class="alert alert-success">
+          {% else %}
+          <div class="alert alert-warning">
+          {% endif %}
+              <p><small>
+            {% trans "Your answer was" %} </small>
+            <strong>
+              {{ previous.previous_outcome|yesno:"correct,incorrect" }}
+            </strong>
+            </p>
 
-<br />
+          </div>
 
-{% if question %}
+          {% include 'correct_answer.html' %}
 
-{% if progress %}
-<div style="float: right;">
-{% trans "Question" %} {{ progress.0|add:1 }} {% trans "of" %} {{ progress.1 }}
-</div>
-{% endif %}
+          <p><strong>{% trans "Explanation" %}:</strong></p>
+          <div class="well " style="background-color: #fcf8e3;">
+            <p>{{ previous.previous_question.explanation }}</p>
+          </div>
 
-<p>
-  <small class="muted">{% trans "Question category" %}:</small>
-  <strong>{{ question.category }}</strong>
-</p>
+          <hr>
 
-<p class="lead">{{ question.content }}</p>
+        {% endif %}
 
-{% if question.figure %}
-    <img src="{{ question.figure.url }}" alt="{{ question.content }}" />
-{% endif %}
+    <br />
 
-<form action="" method="POST">{% csrf_token %}
-  <input type=hidden name="question_id" value="{{ question.id }}">
+    {% if question %}
 
-  <ul class="list-group">
+      <p>
+        <small class="muted">{% trans "Question category" %}:</small>
+        <strong>{{ question.category }}</strong>
+      </p>
 
-	{% for answer in form.answers %}
-	  <li class="list-group-item">
-	    {{ answer }}
-	  </li>
-	{% endfor %}
+      <p class="lead">{{ question.content }}</p>
 
-  </ul>
-  <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-warning" >
-</form>
+      {% if question.figure %}
+          <img src="{{ question.figure.url }}" alt="{{ question.content }}" />
+      {% endif %}
 
-{% endif %}
+      <form action="" method="POST">{% csrf_token %}
+        <input type=hidden name="question_id" value="{{ question.id }}">
 
-<hr>
+        <ul class="list-group">
 
+        {% for answer in form.answers %}
+          <li class="list-group-item">
+            {{ answer }}
+          </li>
+        {% endfor %}
 
+        </ul>
+        <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-warning" >
+      </form>
+
+    {% endif %}
+
+      </div>
+  </div>
+</main>
 {% endblock %}
