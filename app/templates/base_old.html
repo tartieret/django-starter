@@ -81,16 +81,10 @@
                   <li class="header-nav-item">
                     <a class="nav-link header-nav-link" href="{% url 'home' %}">{% trans "Home" %}</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                  <li class="header-nav-item">
+                    <a class="nav-link header-nav-link" href="#featuresSection">Features</a>
                   </li>
                 {% if request.user.is_authenticated %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'quiz:quiz_index' %}">{% trans "Practice" %}</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'quiz:quiz_progress' %}">{% trans "Progress" %}</a>
-                  </li>
                   <li class="header-nav-item">
                     {# URL provided by django-allauth/account/urls.py #}
                     <a class="nav-link header-nav-link" href="{% url 'users:profile' %}">{% trans "Profile" %}</a>
@@ -218,9 +212,8 @@
               <div class="col-md-6 mb-4 mb-md-0">
                 <!-- Nav Link -->
                 <ul class="nav nav-sm nav-white nav-x-sm align-items-center">
-                {% comment %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
+                    <a class="nav-link" href="{% url 'privacy' %}">{% trans "Privacy & Policy" %}</a>
                   </li>
                   <li class="nav-item opacity mx-3">&#47;</li>
                   <li class="nav-item">
@@ -230,7 +223,6 @@
                   <li class="nav-item">
                     <a class="nav-link" href="#">{% trans 'Site Map' %}</a>
                   </li>
-                  {% endcomment %}
                 </ul>
                 <!-- End Nav Link -->
               </div>
