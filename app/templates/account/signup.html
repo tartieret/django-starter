@@ -1,11 +1,13 @@
-{% extends "account/base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
-{% block inner %}
+{% block content %}
+<div class="container space-1 space-lg-2">
+
 
 <form id="signup_form" method="post" action="{% url 'account_signup' %}" class="w-md-75 w-lg-50 mx-md-auto" >
   {% csrf_token %}
@@ -36,5 +38,7 @@
   </div>
   <!-- End Button -->
 </form>
+</div>
+
 {% endblock %}
 

@@ -1,4 +1,4 @@
-{% extends "account/base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
 {% load account socialaccount %}
@@ -6,7 +6,9 @@
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block inner %}
+{% block content %}
+<div class="container space-1 space-lg-2">
+
 
 {% get_providers as socialaccount_providers %}
 
@@ -92,6 +94,6 @@
       <!-- End Button -->
     </form>
   <!-- End Login Form -->
-
+</div>
 {% endblock %}
 

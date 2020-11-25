@@ -1,4 +1,4 @@
-{% extends "account/base.html" %}
+{% extends "account/base_info.html" %}
 
 {% load i18n %}
 {% load account %}
@@ -7,13 +7,18 @@
 
 
 {% block inner %}
-<h1>{% trans "Confirm E-mail Address" %}</h1>
+
+  <!-- Title -->
+  <div class="mb-3 mb-md-4">
+    <h1 class="h2 mb-0">{% trans "Confirm E-mail Address" %}</h1>
+  </div>
+  <!-- End Title -->
 
 {% if confirmation %}
 
 {% user_display confirmation.email_address.user as user_display %}
 
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
+<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an your email address.{% endblocktrans %}</p>
 
 <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
 {% csrf_token %}
