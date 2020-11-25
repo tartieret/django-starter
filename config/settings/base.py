@@ -74,6 +74,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "app.main.apps.MainConfig",
     "app.users.apps.UsersConfig",
     "app.quiz.apps.QuizConfig"
     # Your stuff: custom apps go here
