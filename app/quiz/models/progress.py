@@ -5,7 +5,7 @@ from django.core.validators import (
     validate_comma_separated_integer_list,
 )
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .category import Category
 from .sitting import Sitting
