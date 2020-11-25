@@ -1,0 +1,103 @@
+{% comment %}
+Base template for all status pages (404, 500...)
+{% endcomment %}
+{% load static i18n compress%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Title -->
+  <title>{% block title %}{% endblock %}</title>
+
+  <!-- Required Meta Tags Always Come First -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'img/favicons/favicon.ico' %}">
+
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+
+  <!-- CSS Implementing Plugins -->
+  <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/all.min.css' %}">
+
+  <!-- CSS Front Template -->
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+</head>
+<body class="bg-img-hero-fixed" style="background-image: url({% static 'svg/illustrations/error-404.svg' %});">
+  <!-- ========== HEADER ========== -->
+  <header id="header" class="header header-bg-transparent header-abs-top py-3">
+    <div class="header-section">
+      <div id="logoAndNav" class="container">
+        <nav class="navbar">
+          <a class="navbar-brand" href="{ url 'home'}" aria-label="Front">
+            <img src="{% static 'svg/logos/logo.svg' %}" alt="Logo">
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <!-- ========== END HEADER ========== -->
+
+  <!-- ========== MAIN ========== -->
+  <main id="content" role="main">
+    {% block content %}
+
+    {% endblock %}
+  </main>
+  <!-- ========== END MAIN ========== -->
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="position-absolute right-0 bottom-0 left-0">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center space-1">
+        <!-- Copyright -->
+        <p class="small text-muted mb-0">&copy; MyLog. 2020.</p>
+        <!-- End Copyright -->
+
+        <!-- Social Networks -->
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <a class="btn btn-xs btn-icon btn-ghost-secondary" href="#">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a class="btn btn-xs btn-icon btn-ghost-secondary" href="#">
+              <i class="fab fa-google"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a class="btn btn-xs btn-icon btn-ghost-secondary" href="#">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a class="btn btn-xs btn-icon btn-ghost-secondary" href="#">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+        </ul>
+        <!-- End Social Networks -->
+      </div>
+    </div>
+  </footer>
+  <!-- ========== END FOOTER ========== -->
+
+  <!-- JS Global Compulsory -->
+  <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/jquery-migrate/dist/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- JS Implementing Plugins -->
+
+  <!-- JS Front -->
+  <script src="{% static 'js/hs.core.js' %}"></script>
+
+  <!-- IE Support -->
+  <script>
+    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="../../assets/vendor/polifills.js"><\/script>');
+  </script>
+</body>
+</html>
