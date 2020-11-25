@@ -93,7 +93,7 @@
                   </li>
                   <li class="header-nav-item">
                     {# URL provided by django-allauth/account/urls.py #}
-                    <a class="nav-link header-nav-link" href="{% url 'users:profile' %}">{% trans "Profile" %}</a>
+                    <a class="nav-link header-nav-link" href="{% url 'users:detail' request.user.id %}">{% trans "Profile" %}</a>
                   </li>
                   <li class="header-nav-item">
                     {# URL provided by django-allauth/account/urls.py #}

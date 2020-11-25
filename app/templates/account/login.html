@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "account/base.html" %}
 
 {% load i18n %}
 {% load account socialaccount %}
@@ -6,12 +6,11 @@
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block content %}
+{% block inner %}
 
 {% get_providers as socialaccount_providers %}
 
   <!-- Login Form -->
-  <div class="container space-1 space-lg-2">
     <form class="w-md-75 w-lg-50 mx-md-auto" class="login" method="POST" action="{% url 'account_login' %}">
        {% csrf_token %}
 
@@ -92,7 +91,6 @@
       </div>
       <!-- End Button -->
     </form>
-  </div>
   <!-- End Login Form -->
 
 {% endblock %}
