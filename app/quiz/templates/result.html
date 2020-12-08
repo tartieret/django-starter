@@ -60,7 +60,9 @@
           <p class="lead">{{ sitting.result_message }}</p>
       {% endif %}
 
-      <p>{% trans "Review the questions below and try the exam again in the future"%}.</p>
+      {% if mode == 'exam' %}
+        <p>{% trans "Review the questions below and try the exam again in the future"%}.</p>
+      {% endif %}
 
       {% if user.is_authenticated %}
         <p>{% trans "The result of this exam will be stored in your progress section so you can review and monitor your progression" %}.</p>

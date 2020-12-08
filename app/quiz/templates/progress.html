@@ -6,17 +6,14 @@
 {% block title %} {% trans "Track your progress" %} {% endblock %}
 {% block description %} {% trans "User Progress Page" %} {% endblock %}
 
+{% block page_title %} {% trans "Monitor your progress" %} {% endblock %}
+
 {% block inner %}
 
 <div class="container space-bottom-3">
   <div class="mx-auto">
 
     {% if cat_scores %}
-    <div class="row">
-      <div class="col">
-      <h2>{% trans "Quiz results" %}</h2>
-      </div>
-    </div>
 
     <div class="row">
       <div class="col">
@@ -27,6 +24,7 @@
             <th>{% trans "Correctly answererd" %}</th>
             <th>{% trans "Incorrect" %}</th>
             <th>%</th>
+            <th></th>
             </tr>
           </thead>
           <tbody>
@@ -36,6 +34,7 @@
             <td>{{ value.0 }}</td>
             <td>{{ value.1 }}</td>
             <td>{{ value.2 }}</td>
+            <td><a class="btn btn-sm btn-primary text-white" href="{% url 'quiz:quiz_category_list_matching' category_name=cat %}">{% trans "Practice" %}</a></td>
             </tr>
             {% endfor %}
           </tbody>

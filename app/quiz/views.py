@@ -246,6 +246,7 @@ class QuizTake(FormView):
         if self.quiz.exam_paper is False:
             self.sitting.delete()
 
+        results["mode"] = self.sitting.mode
         return render(self.request, self.result_template_name, results)
 
     def anon_load_sitting(self):

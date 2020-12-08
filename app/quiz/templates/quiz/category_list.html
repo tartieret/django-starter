@@ -1,6 +1,6 @@
 {% extends 'app.html' %}
 {% load i18n %}
-{% block title %}{% trans "Practise" %}{% endblock %}
+{% block title %}{% trans "Practice" %}{% endblock %}
 
 {% block page_title %}{% trans "Choose what to focus on" %}{% endblock %}
 
@@ -19,7 +19,7 @@
               <h2 class="h4 mb-1">{{ cat.category }}</h2>
               <small class="d-block text-body">{{ cat.description }}</small>
             </div>
-            <a class="btn btn-sm btn-block btn-primary stretched-link" href="{% url 'quiz:quiz_category_list_matching' category_name=cat.category %}">{% trans "Practise" %}</a>
+            <a class="btn btn-sm btn-block btn-primary stretched-link" href="{% url 'quiz:quiz_category_list_matching' category_name=cat.category %}">{% trans "Practice" %}</a>
           </div>
         </div>
         {% endfor %}

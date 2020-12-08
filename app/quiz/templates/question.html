@@ -63,7 +63,7 @@
         <form action="" method="POST">{% csrf_token %}
           <input type=hidden name="question_id" value="{{ question.id }}">
 
-          <ul class="list-group">
+          <ul class="list-group mb-4">
 
           {% for answer in form.answers %}
             <li class="list-group-item">
