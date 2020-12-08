@@ -12,8 +12,17 @@ from .quiz import Quiz
 from .question import Question
 
 
+class SittingMode:
+    STUDY = "study"
+    EXAM = "exam"
+
+    @staticmethod
+    def is_valid(value):
+        return value in [SittingMode.STUDY, SittingMode.EXAM]
+
+
 class SittingManager(models.Manager):
-    def new_sitting(self, user, quiz):
+    def new_sitting(self, user, quiz, mode=SittingMode.STUDY):
         if quiz.random_order is True:
             question_set = quiz.question_set.all().select_subclasses().order_by("?")
         else:
@@ -35,6 +44,7 @@ class SittingManager(models.Manager):
         new_sitting = self.create(
             user=user,
             quiz=quiz,
+            mode=mode,
             question_order=questions,
             question_list=questions,
             incorrect_questions="",
@@ -44,27 +54,23 @@ class SittingManager(models.Manager):
         )
         return new_sitting
 
-    def user_sitting(self, user, quiz):
+    def user_sitting(self, user, quiz, mode=SittingMode.STUDY):
         """Retrieve an existing sitting for the current quiz
         or start a new one
         """
         if (
             quiz.single_attempt is True
-            and self.filter(user=user, quiz=quiz, complete=True).exists()
+            and self.filter(user=user, quiz=quiz, mode=mode, complete=True).exists()
         ):
             return False
 
         try:
-            sitting = self.get(user=user, quiz=quiz, complete=False)
+            sitting = self.get(user=user, quiz=quiz,  mode=mode, complete=False)
         except Sitting.DoesNotExist:
-            sitting = self.new_sitting(user, quiz)
+            sitting = self.new_sitting(user, quiz,  mode=mode)
         except Sitting.MultipleObjectsReturned:
-            sitting = self.filter(user=user, quiz=quiz, complete=False)[0]
+            sitting = self.filter(user=user, quiz=quiz,  mode=mode, complete=False)[0]
         return sitting
-
-class SittingMode:
-    STUDY = "study"
-    EXAM = "exam"
 
 
 class Sitting(models.Model):

@@ -4,5 +4,5 @@ from .multichoice import Answer, MCQuestion
 from .question import Question
 from .quiz import Quiz
 from .progress import Progress
-from .sitting import Sitting
+from .sitting import Sitting, SittingMode
 from .true_false import TF_Question

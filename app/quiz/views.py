@@ -2,12 +2,13 @@ import random
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, TemplateView, FormView
 
 from .forms import QuestionForm, EssayForm
-from .models import Quiz, Category, Progress, Sitting, Question, Essay_Question
+from .models import Quiz, Category, Progress, Sitting, SittingMode, Question, Essay_Question
 
 
 class QuizMarkerMixin(object):
@@ -133,6 +134,12 @@ class QuizTake(FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.quiz = get_object_or_404(Quiz, url=self.kwargs["quiz_name"])
+
+        # find out if it's study or exam mode
+        self.mode = request.GET.get("mode", SittingMode.STUDY)
+        if not SittingMode.is_valid(self.mode):
+            raise Http404
+
         if self.quiz.draft and not request.user.has_perm("quiz.change_quiz"):
             raise PermissionDenied
 
@@ -142,7 +149,7 @@ class QuizTake(FormView):
             self.logged_in_user = self.request.user.is_authenticated
 
         if self.logged_in_user:
-            self.sitting = Sitting.objects.user_sitting(request.user, self.quiz)
+            self.sitting = Sitting.objects.user_sitting(request.user, self.quiz, self.mode)
         else:
             self.sitting = self.anon_load_sitting()
 
@@ -168,7 +175,6 @@ class QuizTake(FormView):
 
     def get_form_kwargs(self):
         kwargs = super(QuizTake, self).get_form_kwargs()
-
         return dict(kwargs, question=self.question)
 
     def form_valid(self, form):
@@ -182,7 +188,6 @@ class QuizTake(FormView):
                 return self.final_result_anon()
 
         self.request.POST = {}
-
         return super().get(self, self.request)
 
     def get_context_data(self, **kwargs):
@@ -207,7 +212,8 @@ class QuizTake(FormView):
             self.sitting.add_incorrect_question(self.question)
             progress.update_score(self.question, 0, 1)
 
-        if self.quiz.answers_at_end is not True:
+        if self.sitting.mode == SittingMode.STUDY:
+            # in study mode, we show the answer to the previous question
             self.previous = {
                 "previous_answer": guess,
                 "previous_outcome": is_correct,
@@ -233,7 +239,7 @@ class QuizTake(FormView):
 
         self.sitting.mark_quiz_complete()
 
-        if self.quiz.answers_at_end:
+        if self.sitting.mode == SittingMode.EXAM:
             results["questions"] = self.sitting.get_questions(with_answers=True)
             results["incorrect_questions"] = self.sitting.get_incorrect_questions
 
@@ -303,7 +309,7 @@ class QuizTake(FormView):
             )
 
         self.previous = {}
-        if self.quiz.answers_at_end is not True:
+        if self.sitting.mode == SittingMode.STUDY:
             self.previous = {
                 "previous_answer": guess,
                 "previous_outcome": is_correct,
@@ -335,7 +341,7 @@ class QuizTake(FormView):
 
         del self.request.session[self.quiz.anon_q_list()]
 
-        if self.quiz.answers_at_end:
+        if self.sitting.mode == SittingMode.EXAM:
             results["questions"] = sorted(
                 self.quiz.question_set.filter(id__in=q_order).select_subclasses(),
                 key=lambda q: q_order.index(q.id),
@@ -350,6 +356,7 @@ class QuizTake(FormView):
 
         del self.request.session[self.quiz.anon_q_data()]
 
+        results["mode"] = self.sitting.mode
         return render(self.request, "result.html", results)
 
 

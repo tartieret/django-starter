@@ -23,18 +23,16 @@
           <p>{{ previous.previous_question }}</p>
 
           {% if previous.previous_outcome %}
-          <div class="alert alert-success">
+            <div class="alert alert-soft-success">
           {% else %}
-          <div class="alert alert-warning">
+            <div class="alert alert-soft-danger">
           {% endif %}
-              <p><small>
-            {% trans "Your answer was" %} </small>
-            <strong>
-              {{ previous.previous_outcome|yesno:"correct,incorrect" }}
-            </strong>
-            </p>
-
-          </div>
+              <p>{% trans "Your answer was" %}
+                <strong>
+                  {{ previous.previous_outcome|yesno:"correct,incorrect" }}
+                </strong>
+              </p>
+            </div>
 
           {% include 'correct_answer.html' %}
 
@@ -74,7 +72,7 @@
           {% endfor %}
 
           </ul>
-          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-warning" >
+          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-info" >
         </form>
 
       {% endif %}

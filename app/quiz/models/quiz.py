@@ -51,16 +51,6 @@ class Quiz(models.Model):
         help_text=_("Number of questions to be answered on each attempt."),
     )
 
-    # answers_at_end = models.BooleanField(
-    #     blank=False,
-    #     default=False,
-    #     help_text=_(
-    #         "Correct answer is NOT shown after question."
-    #         " Answers displayed at the end."
-    #     ),
-    #     verbose_name=_("Answers at end"),
-    # )
-
     exam_paper = models.BooleanField(
         blank=False,
         default=False,
