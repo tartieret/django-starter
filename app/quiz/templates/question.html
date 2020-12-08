@@ -47,36 +47,38 @@
 
         {% endif %}
 
-    <br />
+      <br />
 
-    {% if question %}
+      {% if question %}
 
-      <p>
-        <small class="muted">{% trans "Question category" %}:</small>
-        <strong>{{ question.category }}</strong>
-      </p>
+        <p>
+          <small class="muted">{% trans "Question category" %}:</small>
+          <strong>{{ question.category }}</strong>
+        </p>
 
-      <p class="lead">{{ question.content }}</p>
+        <p class="lead">{{ question.content }}</p>
 
-      {% if question.figure %}
-          <img src="{{ question.figure.url }}" alt="{{ question.content }}" />
+        {% if question.figure %}
+            <img src="{{ question.figure.url }}" alt="{{ question.content }}" />
+        {% endif %}
+
+        <form action="" method="POST">{% csrf_token %}
+          <input type=hidden name="question_id" value="{{ question.id }}">
+
+          <ul class="list-group">
+
+          {% for answer in form.answers %}
+            <li class="list-group-item">
+              {{ answer }}
+            </li>
+          {% endfor %}
+
+          </ul>
+          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-warning" >
+        </form>
+
       {% endif %}
-
-      <form action="" method="POST">{% csrf_token %}
-        <input type=hidden name="question_id" value="{{ question.id }}">
-
-        <ul class="list-group">
-
-        {% for answer in form.answers %}
-          <li class="list-group-item">
-            {{ answer }}
-          </li>
-        {% endfor %}
-
-        </ul>
-        <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-warning" >
-      </form>
-
-    {% endif %}
+    </div>
+    </div>
 
 {% endblock %}

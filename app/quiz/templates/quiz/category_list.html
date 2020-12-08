@@ -1,18 +1,44 @@
 {% extends 'app.html' %}
 {% load i18n %}
-{% block title %}{% trans "All Quizzes" %}{% endblock %}
+{% block title %}{% trans "Practise" %}{% endblock %}
+
+{% block page_title %}{% trans "Choose what to focus on" %}{% endblock %}
 
 {% block inner %}
-<h2>{% trans "Category list" %}</h2>
+<div class="container space-bottom-3">
+  <div class="col-sm-12 col-md-10 mx-auto">
 
-<ul>
-  {% for cat in category_list %}
-  <li>
-	<a href="{% url 'quiz:quiz_category_list_matching' category_name=cat.category %}">
-	  {{ cat.category }}
-	</a>
-  </li>
-  {% endfor %}
-</ul>
+    <!-- List of categories -->
+    <div class="row">
+      <div class="card-sm-columns card-sm-2-count card-lg-3-count">
+
+        {% for cat in category_list %}
+        <div class="card shadow-sm max-w-27rem transition-3d-hover mx-auto mb-5 card-hover-shadow transition-3d-hover">
+          <div class="card-body">
+            <div class="mb-3">
+              <h2 class="h4 mb-1">{{ cat.category }}</h2>
+              <small class="d-block text-body">{{ cat.description }}</small>
+            </div>
+            <a class="btn btn-sm btn-block btn-primary stretched-link" href="{% url 'quiz:quiz_category_list_matching' category_name=cat.category %}">{% trans "Practise" %}</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- End List -->
+    
+    <!-- Link to all quizzes -->
+    <div class="text-center mb-2 mt-5">
+      <h4>
+        <a href="{% url 'quiz:quiz_index' %}"
+                    >{% trans "Or see all available tests" %}
+        </a>
+      </h4>
+    </div>
+    <!-- End Link -->
+  </div>
+
+</div>
+
 
 {% endblock %}

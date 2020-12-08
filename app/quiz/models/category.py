@@ -18,6 +18,8 @@ class Category(models.Model):
         verbose_name=_("Category"), max_length=250, blank=True, unique=True, null=True
     )
 
+    description = models.CharField(verbose_name=_("Description"), max_length=150, blank=True, default="")
+
     objects = CategoryManager()
 
     class Meta:
