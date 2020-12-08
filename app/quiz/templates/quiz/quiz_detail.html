@@ -40,11 +40,14 @@
         {% endif %}
         <p>{{ quiz.description }}</p>
         <div class="row align-items-center mb-5">
-        <div class="col text-sm-center">
-          <a href="{% url 'quiz:quiz_question' quiz_name=quiz.url %}" class="btn btn-primary">
-          {% trans "Start quiz" %}
-          </a>
-          </div>
+          <div class="col text-center">
+            <a href="{% url 'quiz:quiz_question' quiz_name=quiz.url %}" class="btn btn-info">
+              {% trans "Study" %}
+              </a>
+            <a href="{% url 'quiz:quiz_question' quiz_name=quiz.url %}" class="btn btn-primary">
+            {% trans "Exam" %}
+            </a>
+          </div>  
         </div>
       </div>
   </div>

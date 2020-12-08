@@ -1,35 +1,48 @@
 {% extends 'app.html' %}
 {% load i18n %}
-{% block title %}{% trans "Quizzes related to" %} {{ category.category }}{% endblock %}
+{% block title %}{% trans "Tests related to" %} {{ category.category }}{% endblock %}
+
+{% block page_title %}{% trans "Test your knowledge about" %} <span class="text-primary"><strong>{{ category.category }} </strong></span>{% endblock %}
 
 {% block inner %}
 
-<!-- ========== MAIN ========== -->
-<main id="content" role="main">
-    <div class="container">
-      <div class="row">
+<div class="container space-bottom-3">
+    <div class="mx-auto">
 
-        <h1>{% trans "Quizzes in the" %} <strong>{{ category.category }} </strong>{% trans "category" %}</h1>
-      </div>
+    {% with object_list as quizzes %}
+      {% if quizzes %}
+        <table class="table table-bordered table-striped">
 
-      <div class="row">
+          <thead>
+          <tr>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th></th>
+          </tr>
+          </thead>
 
-        {% with object_list as quizzes %}
-          {% if quizzes %}
-              <ul>
-              {% for quiz in quizzes %}
-                  <li>
-              <a href="{% url 'quiz:quiz_question' quiz_name=quiz.url %}">
-              {{ quiz.title }}
-              </a>
-            </li>
-              {% endfor %}
-              </ul>
-          {% else %}
-              <p>{% trans "There are no quizzes" %}</p>
-          {% endif %}
-        {% endwith %}
-      </div>
+          <tbody>
+
+            {% for quiz in quizzes %}
+
+            <tr>
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.category }}</td>
+            <td>
+            <a href="{% url 'quiz:quiz_start_page' slug=quiz.url %}">
+              {% trans "View details" %}
+            </a>
+          </tr>
+
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      {% else %}
+          <p>{% trans "There are no available quizzes" %}.</p>
+      {% endif %}
+    {% endwith %}
   </div>
-</main>
+
 {% endblock %}
