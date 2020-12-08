@@ -78,12 +78,6 @@
             <div id="navBar" class="collapse navbar-collapse">
               <div class="navbar-body header-abs-top-inner">
                 <ul class="js-scroll-nav navbar-nav">
-                  <li class="header-nav-item">
-                    <a class="nav-link header-nav-link" href="{% url 'home' %}">{% trans "Home" %}</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">About</a>
-                  </li>
                 {% if request.user.is_authenticated %}
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'quiz:quiz_index' %}">{% trans "Practice" %}</a>
@@ -100,6 +94,12 @@
                     <a class="nav-link header-nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
                   </li>
                 {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="#features">Features</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#pricingSection">Pricing</a>
+                  </li>
                   <li class="header-nav-last-item ml-lg-2">
                     {# URL provided by django-allauth/account/urls.py #}
                     <a class="btn btn-primary btn-sm btn-pill transition-3d-hover" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>

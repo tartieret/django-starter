@@ -1,1 +1,238 @@
 {% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+
+  <!-- Hero Section -->
+  <div class="d-lg-flex position-relative">
+    <div class="container d-lg-flex align-items-lg-center space-top-1 space-lg-0 min-vh-lg-100">
+      <!-- Content -->
+      <div class="w-md-100">
+        <div class="row">
+          <div class="col-lg-5">
+            <div class="mb-5 mt-2">
+              <h1 class="display-4 mb-3">
+                Ready to fly ?
+
+                <span class="text-primary text-highlight-warning">
+                  <span class="js-text-animation"></span>
+                </span>
+              </h1>
+              <p class="lead">Prepare with the largest set of technical questions about Airbus 320</p>
+            </div>
+
+            <a class="btn btn-primary btn-wide transition-3d-hover" href="../pages/login-simple.html">Get Started</a>
+            <a class="btn btn-link btn-wide" href="#">Learn More <i class="fas fa-angle-right fa-sm ml-1"></i></a>
+          </div>
+        </div>
+      </div>
+      <!-- End Content -->
+
+      <!-- SVG Shape -->
+      <figure class="col-lg-7 col-xl-6 d-none d-lg-block position-absolute top-0 right-0 pr-0 ie-main-hero">
+        <svg xmlns="http://www.w3.org/2000/svg' %}" x="0px" y="0px" viewBox="0 0 1137.5 979.2">
+          <path fill="#F9FBFF" d="M565.5,957.4c81.1-7.4,155.5-49.3,202.4-115.7C840,739.8,857,570,510.7,348.3C-35.5-1.5-4.2,340.3,2.7,389
+            c0.7,4.7,1.2,9.5,1.7,14.2l29.3,321c14,154.2,150.6,267.8,304.9,253.8L565.5,957.4z"/>
+          <defs>
+            <path id="mainHeroSVG1" d="M1137.5,0H450.4l-278,279.7C22.4,430.6,24.3,675,176.8,823.5l0,0C316.9,960,537.7,968.7,688.2,843.6l449.3-373.4V0z"/>
+          </defs>
+          <clipPath id="mainHeroSVG2">
+            <use xlink:href="#mainHeroSVG1"/>
+          </clipPath>
+          <g transform="matrix(1 0 0 1 0 0)" clip-path="url(#mainHeroSVG2)">
+            <image width="750" height="750" xlink:href="{% static 'images/home/cabin.png' %}" transform="matrix(1.4462 0 0 1.4448 52.8755 0)"></image>
+          </g>
+        </svg>
+      </figure>
+      <!-- End SVG Shape -->
+    </div>
+  </div>
+  <!-- End Hero Section -->
+
+  <!-- Icon Blocks Section -->
+    <div class="overflow-hidden">
+      <div class="container space-2 space-top-lg-3 position-relative" id="features">
+        <!-- Title -->
+        <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-5 mb-md-9">
+          <span class="d-block small font-weight-bold text-cap mb-2">What we do?</span>
+          <h2>Front makes designing easy and performance fast</h2>
+        </div>
+        <!-- End Title -->
+
+        <div class="row">
+          <div class="col-sm-4 mb-3 mb-sm-5">
+            <!-- Icon Blocks -->
+            <div class="pr-lg-6">
+              <figure class="max-w-6rem w-100 mb-3">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-45.svg' %}" alt="svg">
+              </figure>
+              <h4>More creativity</h4>
+              <p>This is where we really begin to visualize your napkin sketches and make them into beautiful pixels.</p>
+            </div>
+            <!-- End Icon Blocks -->
+          </div>
+
+          <div class="col-sm-4 mb-3 mb-sm-5">
+            <!-- Icon Blocks -->
+            <div class="pr-lg-6">
+              <figure class="max-w-6rem w-100 mb-3">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-5.svg' %}" alt="svg">
+              </figure>
+              <h4>Scale budgets efficiently</h4>
+              <p>Now that we've aligned the details, it's time to get things mapped out and organized.</p>
+            </div>
+            <!-- End Icon Blocks -->
+          </div>
+
+          <div class="col-sm-4 mb-3 mb-sm-5">
+            <!-- Icon Blocks -->
+            <div class="pr-lg-6">
+              <figure class="max-w-6rem w-100 mb-3">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-2.svg' %}" alt="svg">
+              </figure>
+              <h4>Smart Dashboards</h4>
+              <p>This is where we really begin to visualize your napkin sketches and make them into beautiful pixels.</p>
+            </div>
+            <!-- End Icon Blocks -->
+          </div>
+
+          <div class="col-sm-4 mb-3 mb-sm-5 mb-sm-0">
+            <!-- Icon Blocks -->
+            <div class="pr-lg-6">
+              <figure class="max-w-6rem w-100 mb-3">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-1.svg' %}" alt="svg">
+              </figure>
+              <h4>Control Center</h4>
+              <p>Now that we've aligned the details, it's time to get things mapped out and organized.</p>
+            </div>
+            <!-- End Icon Blocks -->
+          </div>
+
+          <div class="col-sm-4 mb-3 mb-sm-0">
+            <!-- Icon Blocks -->
+            <div class="pr-lg-6">
+              <figure class="max-w-6rem w-100 mb-3">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-15.svg' %}" alt="svg">
+              </figure>
+              <h4>Email Reports</h4>
+              <p>We strive to embrace and drive change in our industry which allows us to keep our clients relevant.</p>
+            </div>
+            <!-- End Icon Blocks -->
+          </div>
+
+          <div class="col-sm-4">
+            <!-- Icon Blocks -->
+            <div class="pr-lg-6">
+              <figure class="max-w-6rem w-100 mb-3">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-26.svg' %}" alt="svg">
+              </figure>
+              <h4>Forecasting</h4>
+              <p>Staying focused allows us to turn every project we complete into something we love.</p>
+            </div>
+            <!-- End Icon Blocks -->
+          </div>
+        </div>
+
+        <!-- SVG Shapes -->
+        <figure class="position-absolute z-index-n1" style="top: -35rem; left: 50rem; width: 62rem; height: 62rem;">
+          <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg' %}" x="0px" y="0px" viewBox="0 0 260 260">
+            <circle fill="#e7eaf3" opacity=".7" cx="130" cy="130" r="130"/>
+          </svg>
+        </figure>
+        <!-- End SVG Shapes -->
+      </div>
+    </div>
+    <!-- End Icon Blocks Section -->
+
+
+    <!-- Pricing Section -->
+    <div id="pricingSection" class="container space-top-2 space-top-lg-3">
+      <!-- Title -->
+      <div class="w-lg-65 text-center mx-auto mb-5 mb-sm-9">
+        <h2 class="h1">Scalable plans</h2>
+        <p>All kinds of plans that scale with your user growth</p>
+      </div>
+      <!-- End Title -->
+
+      <div class="w-lg-75 mx-lg-auto">
+        <div class="row align-items-sm-end mx-n2 mb-5 mb-md-7">
+          <div class="col-sm-6 col-md-6 px-2 mb-3 mb-md-0">
+            <!-- Pricing -->
+            <div class="card border shadow-none text-center" data-aos="fade-up" data-aos-delay="100">
+              <div class="card-header border-0">
+                <figure class="text-center mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg' %}" x="0px" y="0px" width="60" height="60" viewBox="0 0 160 160">
+                    <circle fill="#377dff" opacity=".85" cx="80" cy="80" r="48"/>
+                  </svg>
+                </figure>
+                <h4>Starter</h4>
+                <span class="text-dark font-size-2 font-weight-bold">Free</span>
+              </div>
+              <div class="card-body pt-0 pb-5 px-5">
+                <ul class="list-unstyled list-sm-article mb-4">
+                  <li>Community support</li>
+                  <li>400+ pages</li>
+                </ul>
+                <button type="button" class="btn btn-sm btn-block btn-soft-primary transition-3d-hover">Create Account</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-6 px-2 mb-3 mb-md-0">
+            <!-- Pricing -->
+            <div class="card border shadow-none text-center" data-aos="fade-up" data-aos-delay="50">
+              <div class="card-header border-0">
+                <figure class="text-center mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg' %}" x="0px" y="0px" width="60" height="60" viewBox="0 0 160 160">
+                    <circle fill="#377dff" opacity=".85" cx="48" cy="80" r="48"/>
+                    <circle fill="#377dff" opacity=".85" cx="112" cy="80" r="48"/>
+                  </svg>
+                </figure>
+                <h4>Individual</h4>
+                <span class="text-dark font-size-2 font-weight-bold">$59</span>
+              </div>
+              <div class="card-body pt-0 pb-5 px-5">
+                <ul class="list-unstyled list-sm-article mb-4">
+                  <li>Community support</li>
+                  <li>400+ pages</li>
+                  <li>100+ header variations</li>
+                </ul>
+                <button type="button" class="btn btn-sm btn-block btn-primary transition-3d-hover">Try Free for 14 days</button>
+              </div>
+            </div>
+            <!-- End Pricing -->
+          </div>
+
+        </div>
+
+        <!-- Link -->
+        <div class="text-center">
+          <a href="../pages/careers.html">
+            Contact us for
+            <span class="btn btn-xs btn-icon btn-soft-primary rounded-circle mx-2">
+              <i class="fas fa-angle-right"></i>
+            </span>
+            custom plans
+          </a>
+        </div>
+        <!-- End Link -->
+      </div>
+    </div>
+    <!-- End Pricing Section -->
+
+    <!-- CTA -->
+    <div class="container space-top-2 space-bottom-1">
+      <div class="row justify-content-lg-between align-items-lg-center text-center text-lg-left">
+        <div class="col-lg-5 mb-3 mb-lg-0">
+          <h2 class="text-indigo">One tool for your entire team. Get started now!</h2>
+        </div>
+        <div class="col-lg-5 text-lg-right">
+          <a class="btn btn-primary transition-3d-hover" href="#">Get Started</a>
+          <small class="text-muted my-3 my-sm-0 mx-2 mx-sm-3">or</small>
+          <a class="btn btn-soft-indigo transition-3d-hover" href="#">Explore</a>
+        </div>
+      </div>
+    </div>
+    <!-- End CTA -->
+
+{% endblock %}
