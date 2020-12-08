@@ -62,6 +62,10 @@ class SittingManager(models.Manager):
             sitting = self.filter(user=user, quiz=quiz, complete=False)[0]
         return sitting
 
+class SittingMode:
+    STUDY = "study"
+    EXAM = "exam"
+
 
 class Sitting(models.Model):
     """
@@ -81,8 +85,7 @@ class Sitting(models.Model):
     User_answers is a json object in which the question PK is stored
     with the answer the user gave.
     """
-
-    MODES = (('study', _('Study')), ('exam', _('Exam')))
+    MODES = ((SittingMode.STUDY, _('Study')), (SittingMode.EXAM, _('Exam')))
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE
