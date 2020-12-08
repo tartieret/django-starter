@@ -54,8 +54,8 @@
       <div class="container space-2 space-top-lg-3 position-relative" id="features">
         <!-- Title -->
         <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-5 mb-md-9">
-          <span class="d-block small font-weight-bold text-cap mb-2">What we do?</span>
-          <h2>Front makes designing easy and performance fast</h2>
+          <span class="d-block small font-weight-bold text-cap mb-2">{% trans "Our offer" %}</span>
+          <h2>{% trans "Prepare for your A320 technical interview" %}</h2>
         </div>
         <!-- End Title -->
 
@@ -64,10 +64,10 @@
             <!-- Icon Blocks -->
             <div class="pr-lg-6">
               <figure class="max-w-6rem w-100 mb-3">
-                <img class="img-fluid" src="{% static 'svg/icons/icon-45.svg' %}" alt="svg">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-48.svg' %}" alt="svg">
               </figure>
-              <h4>More creativity</h4>
-              <p>This is where we really begin to visualize your napkin sketches and make them into beautiful pixels.</p>
+              <h4>Made by pilots, for pilots</h4>
+              <p>Because we know the challenge of preparing for technical interviews</p>
             </div>
             <!-- End Icon Blocks -->
           </div>
@@ -76,10 +76,10 @@
             <!-- Icon Blocks -->
             <div class="pr-lg-6">
               <figure class="max-w-6rem w-100 mb-3">
-                <img class="img-fluid" src="{% static 'svg/icons/icon-5.svg' %}" alt="svg">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-37.svg' %}" alt="svg">
               </figure>
-              <h4>Scale budgets efficiently</h4>
-              <p>Now that we've aligned the details, it's time to get things mapped out and organized.</p>
+              <h4>Address all technical aspects</h4>
+              <p>Review Autoflight, Pneumatics, Fuel, Hydraulic System, Fire protection...</p>
             </div>
             <!-- End Icon Blocks -->
           </div>
@@ -90,8 +90,8 @@
               <figure class="max-w-6rem w-100 mb-3">
                 <img class="img-fluid" src="{% static 'svg/icons/icon-2.svg' %}" alt="svg">
               </figure>
-              <h4>Smart Dashboards</h4>
-              <p>This is where we really begin to visualize your napkin sketches and make them into beautiful pixels.</p>
+              <h4>Progress reports</h4>
+              <p>Easily identify areas to focus on, and keep improving !</p>
             </div>
             <!-- End Icon Blocks -->
           </div>
@@ -100,22 +100,10 @@
             <!-- Icon Blocks -->
             <div class="pr-lg-6">
               <figure class="max-w-6rem w-100 mb-3">
-                <img class="img-fluid" src="{% static 'svg/icons/icon-1.svg' %}" alt="svg">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-27.svg' %}" alt="svg">
               </figure>
               <h4>Control Center</h4>
               <p>Now that we've aligned the details, it's time to get things mapped out and organized.</p>
-            </div>
-            <!-- End Icon Blocks -->
-          </div>
-
-          <div class="col-sm-4 mb-3 mb-sm-0">
-            <!-- Icon Blocks -->
-            <div class="pr-lg-6">
-              <figure class="max-w-6rem w-100 mb-3">
-                <img class="img-fluid" src="{% static 'svg/icons/icon-15.svg' %}" alt="svg">
-              </figure>
-              <h4>Email Reports</h4>
-              <p>We strive to embrace and drive change in our industry which allows us to keep our clients relevant.</p>
             </div>
             <!-- End Icon Blocks -->
           </div>
@@ -124,10 +112,10 @@
             <!-- Icon Blocks -->
             <div class="pr-lg-6">
               <figure class="max-w-6rem w-100 mb-3">
-                <img class="img-fluid" src="{% static 'svg/icons/icon-26.svg' %}" alt="svg">
+                <img class="img-fluid" src="{% static 'svg/icons/icon-7.svg' %}" alt="svg">
               </figure>
-              <h4>Forecasting</h4>
-              <p>Staying focused allows us to turn every project we complete into something we love.</p>
+              <h4>Discuss with other pilots</h4>
+              <p>When in doubt, ask your fellow pilots for tips and explanations</p>
             </div>
             <!-- End Icon Blocks -->
           </div>
@@ -149,8 +137,8 @@
     <div id="pricingSection" class="container space-top-2 space-top-lg-3">
       <!-- Title -->
       <div class="w-lg-65 text-center mx-auto mb-5 mb-sm-9">
-        <h2 class="h1">Scalable plans</h2>
-        <p>All kinds of plans that scale with your user growth</p>
+        <h2 class="h1">{% trans "Simple, transparent pricing"%}</h2>
+        <p></p>
       </div>
       <!-- End Title -->
 
@@ -165,15 +153,15 @@
                     <circle fill="#377dff" opacity=".85" cx="80" cy="80" r="48"/>
                   </svg>
                 </figure>
-                <h4>Starter</h4>
-                <span class="text-dark font-size-2 font-weight-bold">Free</span>
+                <h4>{% trans "Starter" %}</h4>
+                <span class="text-dark font-size-2 font-weight-bold">{% trans "Free" %}</span>
               </div>
               <div class="card-body pt-0 pb-5 px-5">
                 <ul class="list-unstyled list-sm-article mb-4">
-                  <li>Community support</li>
-                  <li>400+ pages</li>
+                  <li>{% trans "Access to 100 questions" %}</li>
+                  <li>{% trans "Progress report" %}</li>
                 </ul>
-                <button type="button" class="btn btn-sm btn-block btn-soft-primary transition-3d-hover">Create Account</button>
+                <button type="button" class="btn btn-sm btn-block btn-soft-primary transition-3d-hover">{% trans "Create Account" %}</button>
               </div>
             </div>
           </div>
@@ -188,16 +176,17 @@
                     <circle fill="#377dff" opacity=".85" cx="112" cy="80" r="48"/>
                   </svg>
                 </figure>
-                <h4>Individual</h4>
-                <span class="text-dark font-size-2 font-weight-bold">$59</span>
+                <h4>{% trans "Pilot" %}</h4>
+                <span class="text-dark font-size-2 font-weight-bold">$25/year</span>
               </div>
               <div class="card-body pt-0 pb-5 px-5">
                 <ul class="list-unstyled list-sm-article mb-4">
-                  <li>Community support</li>
-                  <li>400+ pages</li>
-                  <li>100+ header variations</li>
+                  <li>{% trans "Unlimited questions" %}</li>
+                  <li>{% trans "Unlimited exams" %}</li>
+                  <li>{% trans "Progress report" %}</li>
+                  <li>{% trans "Discuss questions" %}</li>
                 </ul>
-                <button type="button" class="btn btn-sm btn-block btn-primary transition-3d-hover">Try Free for 14 days</button>
+                <button type="button" class="btn btn-sm btn-block btn-primary transition-3d-hover">{% trans "Try for Free" %}</button>
               </div>
             </div>
             <!-- End Pricing -->
@@ -206,7 +195,7 @@
         </div>
 
         <!-- Link -->
-        <div class="text-center">
+        <div class="text-center mb-5">
           <a href="../pages/careers.html">
             Contact us for
             <span class="btn btn-xs btn-icon btn-soft-primary rounded-circle mx-2">
@@ -219,20 +208,5 @@
       </div>
     </div>
     <!-- End Pricing Section -->
-
-    <!-- CTA -->
-    <div class="container space-top-2 space-bottom-1">
-      <div class="row justify-content-lg-between align-items-lg-center text-center text-lg-left">
-        <div class="col-lg-5 mb-3 mb-lg-0">
-          <h2 class="text-indigo">One tool for your entire team. Get started now!</h2>
-        </div>
-        <div class="col-lg-5 text-lg-right">
-          <a class="btn btn-primary transition-3d-hover" href="#">Get Started</a>
-          <small class="text-muted my-3 my-sm-0 mx-2 mx-sm-3">or</small>
-          <a class="btn btn-soft-indigo transition-3d-hover" href="#">Explore</a>
-        </div>
-      </div>
-    </div>
-    <!-- End CTA -->
 
 {% endblock %}
