@@ -14984,7 +14984,7 @@ button:focus {
 /* Navbar Brand */
 .navbar-brand,
 .navbar-brand>img {
-  width: 7rem;
+  width: 10rem;
 }
 
 /* Navbar Toggler */
@@ -16841,7 +16841,7 @@ button:focus {
 
 .navbar-expand .navbar-brand,
 .navbar-expand .navbar-brand>img {
-  width: 7rem;
+  width: 10rem;
 }
 
 .navbar-expand .navbar-nav {
@@ -19767,7 +19767,7 @@ label.btn {
 ------------------------------------*/
 .brand {
   width: 100%;
-  max-width: 7.5rem;
+  max-width: 10rem;
 }
 
 /*------------------------------------
