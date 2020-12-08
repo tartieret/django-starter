@@ -45,6 +45,9 @@ class SittingManager(models.Manager):
         return new_sitting
 
     def user_sitting(self, user, quiz):
+        """Retrieve an existing sitting for the current quiz
+        or start a new one
+        """
         if (
             quiz.single_attempt is True
             and self.filter(user=user, quiz=quiz, complete=True).exists()
@@ -79,11 +82,15 @@ class Sitting(models.Model):
     with the answer the user gave.
     """
 
+    MODES = (('study', _('Study')), ('exam', _('Exam')))
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE
     )
 
     quiz = models.ForeignKey(Quiz, verbose_name=_("Quiz"), on_delete=models.CASCADE)
+
+    mode = models.CharField(_("Mode"), max_length=10, choices=MODES, default='study')
 
     question_order = models.CharField(
         max_length=1024,

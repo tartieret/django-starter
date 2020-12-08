@@ -146,10 +146,10 @@ class QuizTake(FormView):
         else:
             self.sitting = self.anon_load_sitting()
 
-        if self.sitting is False:
+        if not self.sitting:
             return render(request, self.single_complete_template_name)
 
-        return super(QuizTake, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form(self, *args, **kwargs):
         if self.logged_in_user:
@@ -183,10 +183,10 @@ class QuizTake(FormView):
 
         self.request.POST = {}
 
-        return super(QuizTake, self).get(self, self.request)
+        return super().get(self, self.request)
 
     def get_context_data(self, **kwargs):
-        context = super(QuizTake, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["question"] = self.question
         context["quiz"] = self.quiz
         if hasattr(self, "previous"):
