@@ -51,6 +51,12 @@
 
       <!-- Contact Form -->
       <div class="w-lg-80 mx-auto">
+        {% if form.errors %}
+          <div class="alert alert-soft-danger fade show" role="alert">
+              {% trans "Please fix the following errors:"%}
+              {{ form.errors }}
+            </div>
+        {% endif %}
         {% crispy form form.helper %}
       </div>
       <!-- End contact form -->

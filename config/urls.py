@@ -24,6 +24,8 @@ urlpatterns = [
     path("users/", include("app.users.urls", namespace="users")),
     path("quiz/", include("app.quiz.urls", namespace="quiz")),
     path("accounts/", include("allauth.urls")),
+    # Captcha urls
+    path("captcha/", include("captcha.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

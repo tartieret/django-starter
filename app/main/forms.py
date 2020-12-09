@@ -6,8 +6,10 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from captcha.fields import CaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Div, Field
+
 
 logger = logging.getLogger(__name__)
 
@@ -15,14 +17,30 @@ logger = logging.getLogger(__name__)
 class ContactForm(forms.Form):
     """Contact form"""
 
-    name = forms.CharField(max_length=150, label=_("Name"), required=True)
-    email = forms.EmailField(required=True, label=_("Email"))
+    name = forms.CharField(
+        max_length=150,
+        label=_("Name"),
+        required=True,
+        error_messages={"required": _("Please enter your name")},
+    )
+    email = forms.EmailField(
+        required=True,
+        label=_("Email"),
+        error_messages={"required": _("Please enter your email")},
+    )
     subject = forms.CharField(
         max_length=150,
         label=_("Subject"),
         required=True,
+        error_messages={"required": _("Please enter a subject for your message")},
     )
-    message = forms.CharField(widget=forms.Textarea, required=True)
+    message = forms.CharField(
+        widget=forms.Textarea,
+        required=True,
+        error_messages={"required": _("Please enter a message")},
+    )
+
+    captcha = CaptchaField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,12 +49,15 @@ class ContactForm(forms.Form):
         self.helper.form_class = "contact"
         self.helper.form_method = "post"
         self.helper.form_action = reverse("contact")
+        self.helper.form_show_errors = True
+        self.helper.error_text_inline = True
 
         self.helper.layout = Layout(
-            Field("name"),
-            Field("email"),
-            Field("subject"),
+            Field("name", placeholder=_("John Doe")),
+            Field("email", placeholder="john.doe@gmail.com"),
+            Field("subject", placeholder=_("What is this about?")),
             Field("message", rows=4),
+            Field("captcha", template="bootstrap4/field.html"),
             Div(
                 Submit(
                     "send",
