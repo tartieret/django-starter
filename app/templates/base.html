@@ -221,27 +221,27 @@
             </div>
 
             <div class="col-6 col-md-3 col-lg mb-5 mb-lg-0">
-              <h5 class="text-white">Features</h5>
+              <h5 class="text-white">{% trans "Features" %}</h5>
 
               <!-- Nav Link -->
               <ul class="nav nav-sm nav-x-0 nav-white flex-column">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#features">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#features">{% trans "About" %}</a></li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'home' %}#pricingSection">Pricing</a>
+                  <a class="nav-link" href="{% url 'home' %}#pricingSection">{% trans "Pricing" %}</a>
                 </li>
               </ul>
               <!-- End Nav Link -->
             </div>
 
             <div class="col-6 col-md-3 col-lg">
-              <h5 class="text-white">Support</h5>
+              <h5 class="text-white">{% trans "Support" %}</h5>
 
               <!-- Nav Link -->
               <ul class="nav nav-sm nav-x-0 nav-white flex-column">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Contact us</a>
+                  <a class="nav-link" href="{% url 'contact' %}">{% trans "Contact us" %}</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">{% trans "FAQ" %}</a></li>
               </ul>
               <!-- End Nav Link -->
             </div>
@@ -308,7 +308,7 @@
           <div class="w-md-75 text-lg-center mx-lg-auto">
             <p class="text-white opacity-sm small">
               {% blocktrans %}&copy; A320 Expert 2020. All rights reserved. {% endblocktrans %}
-              
+
             </p>
             <p class="text-white opacity-sm small">
               {% blocktrans %}When you visit or interact with our sites,
