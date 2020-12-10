@@ -25,6 +25,12 @@ class MCQuestion(Question):
         verbose_name=_("Answer Order"),
     )
 
+    allow_multiple_answers = models.BooleanField(
+        verbose_name=_("Allow several answers"),
+        default=False,
+        help_text=_("If true, the user can select several answers"),
+    )
+
     def check_if_correct(self, guess):
         answer = Answer.objects.get(id=guess)
 
