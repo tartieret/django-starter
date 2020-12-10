@@ -10,12 +10,12 @@ class QuestionForm(forms.Form):
         if question.allow_multiple_answers:
             # show checkboxes
             self.fields["answers"] = forms.MultipleChoiceField(
-                choices=choice_list, widget=RadioSelect
+                choices=choice_list, widget=CheckboxSelectMultiple
             )
         else:
             # only a single answer is possible, show radio buttons
             self.fields["answers"] = forms.ChoiceField(
-                choices=choice_list, widget=CheckboxSelectMultiple
+                choices=choice_list, widget=RadioSelect
             )
 
 

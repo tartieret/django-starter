@@ -32,12 +32,16 @@ class MCQuestion(Question):
     )
 
     def check_if_correct(self, guess):
-        answer = Answer.objects.get(id=guess)
-
-        if answer.correct is True:
-            return True
+        if self.allow_multiple_answers:
+            answers = Answer.objects.filter(id__in=guess)
         else:
-            return False
+            answers = [Answer.objects.get(id=guess)]
+
+        for answer in answers:
+            if not answer.correct:
+                return False
+
+        return True
 
     def order_answers(self, queryset):
         if self.answer_order == "content":

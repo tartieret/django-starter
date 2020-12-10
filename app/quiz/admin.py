@@ -94,6 +94,7 @@ class MCQuestionAdmin(admin.ModelAdmin):
         "figure",
         "quiz",
         "explanation",
+        "allow_multiple_answers",
         "answer_order",
     )
 
