@@ -126,7 +126,18 @@ class ProgressAdmin(admin.ModelAdmin):
     )
 
 
+class TFQuestionAdminForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
+
+    explanation = forms.CharField(widget=CKEditorWidget())
+
+    class Meta:
+        model = TF_Question
+        fields = "__all__"
+
+
 class TFQuestionAdmin(admin.ModelAdmin):
+    form = TFQuestionAdminForm
     list_display = ("content", "category", "sub_category")
     list_filter = ("category",)
     fields = (
@@ -134,24 +145,35 @@ class TFQuestionAdmin(admin.ModelAdmin):
         "category",
         "sub_category",
         "figure",
-        "quiz",
-        "explanation",
         "correct",
+        "explanation",
+        "quiz",
     )
 
     search_fields = ("content", "explanation")
     filter_horizontal = ("quiz",)
 
 
+class EssayQuestionAdminForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
+
+    explanation = forms.CharField(widget=CKEditorWidget())
+
+    class Meta:
+        model = TF_Question
+        fields = "__all__"
+
+
 class EssayQuestionAdmin(admin.ModelAdmin):
+    form = EssayQuestionAdminForm
     list_display = ("content", "category", "sub_category")
     list_filter = ("category",)
     fields = (
         "content",
         "category",
         "sub_category",
-        "quiz",
         "explanation",
+        "quiz",
     )
     search_fields = ("content", "explanation")
     filter_horizontal = ("quiz",)
