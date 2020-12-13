@@ -35,7 +35,7 @@ class Question(models.Model):
         upload_to="uploads/%Y/%m/%d", blank=True, null=True, verbose_name=_("Figure")
     )
 
-    content = models.CharField(
+    content = models.TextField(
         max_length=1000,
         blank=False,
         help_text=_("Enter the question text that " "you want displayed"),

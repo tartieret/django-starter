@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext_lazy as _
 
+from ckeditor.widgets import CKEditorWidget
+
 from .models import (
     Answer,
     Category,
@@ -82,18 +84,15 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 
 class MCQuestionAdmin(admin.ModelAdmin):
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content", "category", "sub_category")
     list_filter = ("category",)
     fields = (
         "content",
         "category",
         "sub_category",
         "figure",
-        "quiz",
         "explanation",
+        "quiz",
         "allow_multiple_answers",
         "answer_order",
     )
@@ -117,10 +116,7 @@ class ProgressAdmin(admin.ModelAdmin):
 
 
 class TFQuestionAdmin(admin.ModelAdmin):
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content", "category", "sub_category")
     list_filter = ("category",)
     fields = (
         "content",
@@ -137,10 +133,7 @@ class TFQuestionAdmin(admin.ModelAdmin):
 
 
 class EssayQuestionAdmin(admin.ModelAdmin):
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content", "category", "sub_category")
     list_filter = ("category",)
     fields = (
         "content",

@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "captcha",
+    "ckeditor",
 ]
 
 LOCAL_APPS = [
@@ -290,5 +291,7 @@ REST_FRAMEWORK = {
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
 
-# Your stuff...
+# CKEditor - Rich text editor
 # ------------------------------------------------------------------------------
+
+CKEDITOR_BASEPATH = STATIC_URL + "ckeditor/ckeditor/"
