@@ -83,9 +83,20 @@ class SubCategoryAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
 
+class MCQuestionAdminForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
+
+    explanation = forms.CharField(widget=CKEditorWidget())
+
+    class Meta:
+        model = MCQuestion
+        fields = "__all__"
+
+
 class MCQuestionAdmin(admin.ModelAdmin):
     list_display = ("content", "category", "sub_category")
     list_filter = ("category",)
+    form = MCQuestionAdminForm
     fields = (
         "content",
         "category",

@@ -38,7 +38,7 @@
 
           <p><strong>{% trans "Explanation" %}:</strong></p>
           <div class="well " style="background-color: #fcf8e3;">
-            <p>{{ previous.previous_question.explanation }}</p>
+            <p>{{ previous.previous_question.explanation | safe }}</p>
           </div>
 
           <hr>
@@ -54,10 +54,10 @@
           <strong>{{ question.category }}</strong>
         </p>
 
-        <p class="lead">{{ question.content }}</p>
+        <p class="lead">{{ question.content|safe }}</p>
 
         {% if question.figure %}
-            <img src="{{ question.figure.url }}" alt="{{ question.content }}" />
+            <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
         {% endif %}
 
         <form action="" method="POST">{% csrf_token %}

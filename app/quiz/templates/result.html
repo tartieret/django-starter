@@ -7,11 +7,11 @@
 {% block description %} {% trans "Exam Results for" %} {{ quiz.title }} {% endblock %}
 
 
-{% block page_title %} 
+{% block page_title %}
   {% if mode == 'study' %}
-    {% trans "Study test results" %} 
+    {% trans "Study test results" %}
   {% else %}
-    {% trans "Exam results" %} 
+    {% trans "Exam results" %}
   {% endif %}
 {% endblock %}
 {% block page_subtitle %}
@@ -45,7 +45,7 @@
     {% include 'correct_answer.html' %}
     <p><strong>{% trans "Explanation" %}:</strong></p>
     <div class="well " style="background-color: #fcf8e3;">
-      <p>{{ previous.previous_question.explanation }}</p>
+      <p>{{ previous.previous_question.explanation|safe }}</p>
     </div>
     <hr>
   {% endif %}
@@ -86,7 +86,7 @@
     <div class="card mb-3 card-bordered card-hover-shadow transition-3d-hover">
       <div class="card-body">
         <p class="lead">
-          {{ question.content }}
+          {{ question.content|safe }}
         </p>
 
         {% correct_answer_for_all question %}

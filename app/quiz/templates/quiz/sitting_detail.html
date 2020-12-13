@@ -30,7 +30,7 @@
 
 	<tr>
       <td>
-        {{ question.content }}
+        {{ question.content|safe }}
         {% if question.figure %}
         <div style="max-width: 100px;"><img src="{{ question.figure.url }}" alt="{{ question.figure }}"/></div>
         {% endif %}
