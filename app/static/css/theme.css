@@ -26333,3 +26333,13 @@ a:hover .text-hover-primary {
 /*------------------------------------
   File for your custom SCSS style
 ------------------------------------*/
+
+.nav-question {
+  position: relative;
+  display: block;
+  padding: 0.75rem 0.75rem;
+  background-color: #fff;
+  border: 0.0625rem solid #e7eaf3;
+  width: 50px;
+  text-align: center;
+}

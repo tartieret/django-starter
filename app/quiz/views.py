@@ -259,6 +259,10 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         sitting_id = self.kwargs.get("sitting_id")
         question_order = self.kwargs.get("question_order")
 
+        # before selecting the user, check if authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         # retrieve the current sitting
         self.sitting = get_object_or_404(Sitting, user=request.user, pk=sitting_id)
         self.mode = self.sitting.mode
@@ -302,7 +306,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
 class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):
     template_name = "sitting_question_explanation.html"
 
-    def get(self, request, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         sitting_id = self.kwargs.get("sitting_id")
         question_order = self.kwargs.get("question_order")
         # retrieve the current sitting
@@ -314,9 +318,7 @@ class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):
             UserAnswer, user=self.request.user, sitting=sitting_id, order=question_order
         )
         self.question = Question.objects.get_subclass(pk=self.user_answer.question_id)
-        return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["question"] = self.question
         context["sitting"] = self.sitting
