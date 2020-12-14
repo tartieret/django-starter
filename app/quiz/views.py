@@ -152,11 +152,7 @@ class QuizTake(LoginRequiredMixin, FormView):
         if self.quiz.draft and not request.user.has_perm("quiz.change_quiz"):
             raise PermissionDenied
 
-        try:
-            self.logged_in_user = self.request.user.is_authenticated()
-        except TypeError:
-            self.logged_in_user = self.request.user.is_authenticated
-
+        self.logged_in_user = self.request.user.is_authenticated
         self.sitting = Sitting.objects.user_sitting(request.user, self.quiz, self.mode)
 
         if not self.sitting:

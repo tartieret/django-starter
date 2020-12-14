@@ -1,4 +1,5 @@
 import json
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import (
@@ -65,11 +66,11 @@ class SittingManager(models.Manager):
             return False
 
         try:
-            sitting = self.get(user=user, quiz=quiz,  mode=mode, complete=False)
+            sitting = self.get(user=user, quiz=quiz, mode=mode, complete=False)
         except Sitting.DoesNotExist:
-            sitting = self.new_sitting(user, quiz,  mode=mode)
+            sitting = self.new_sitting(user, quiz, mode=mode)
         except Sitting.MultipleObjectsReturned:
-            sitting = self.filter(user=user, quiz=quiz,  mode=mode, complete=False)[0]
+            sitting = self.filter(user=user, quiz=quiz, mode=mode, complete=False)[0]
         return sitting
 
 
@@ -91,7 +92,8 @@ class Sitting(models.Model):
     User_answers is a json object in which the question PK is stored
     with the answer the user gave.
     """
-    MODES = ((SittingMode.STUDY, _('Study')), (SittingMode.EXAM, _('Exam')))
+
+    MODES = ((SittingMode.STUDY, _("Study")), (SittingMode.EXAM, _("Exam")))
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE
@@ -99,7 +101,7 @@ class Sitting(models.Model):
 
     quiz = models.ForeignKey(Quiz, verbose_name=_("Quiz"), on_delete=models.CASCADE)
 
-    mode = models.CharField(_("Mode"), max_length=10, choices=MODES, default='study')
+    mode = models.CharField(_("Mode"), max_length=10, choices=MODES, default="study")
 
     question_order = models.CharField(
         max_length=1024,
@@ -267,3 +269,45 @@ class Sitting(models.Model):
         answered = len(json.loads(self.user_answers))
         total = self.get_max_score
         return answered, total
+
+
+class UserAnswer(models.Model):
+
+    sitting = models.ForeignKey(
+        "Sitting",
+        on_delete=models.CASCADE,
+        related_name="answers",
+        verbose_name=_("Sitting"),
+        help_text=_("Sitting this answer is linked to"),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="answers",
+        verbose_name=_("User"),
+        help_text=_("User that generated this answer"),
+    )
+
+    order = models.PositiveIntegerField(
+        verbose_name=_("Order of the question in the sitting")
+    )
+
+    question = models.ForeignKey(
+        "Question",
+        on_delete=models.CASCADE,
+        verbose_name=_("Question"),
+        help_text=_("question the user answered to"),
+    )
+
+    answer = models.CharField(
+        max_length=50,
+        verbose_name=_("User answer"),
+        default=None,
+        null=True,
+        blank=True,
+    )
+
+    is_correct = models.BooleanField(
+        verbose_name=_("Is correct"), null=True, default=None
+    )
