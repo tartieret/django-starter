@@ -1,27 +1,32 @@
-# -*- coding: iso-8859-15 -*-
 from importlib import import_module
 
 from django.conf import settings
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 
-try:
-    from django.core.urlresolvers import resolve
-except ImportError:
-    from django.urls import resolve
+from django.urls import resolve
 from django.http import HttpRequest
 from django.template import Template, Context
 from django.test import TestCase
-from django.utils.six import StringIO
 from django.utils.translation import gettext_lazy as _
 
-from .models import Category, Quiz, Progress, Sitting, SubCategory
-from .views import anon_session_score, QuizListView, CategoriesListView, QuizDetailView
+from .models import (
+    Answer,
+    Category,
+    Essay_Question,
+    MCQuestion,
+    Progress,
+    Quiz,
+    Sitting,
+    SubCategory,
+    TF_Question,
+)
+from .views import QuizListView, CategoriesListView, QuizDetailView
 
-from multichoice.models import MCQuestion, Answer
-from true_false.models import TF_Question
-from essay.models import Essay_Question
+
+User = get_user_model()
 
 
 class TestCategory(TestCase):
@@ -75,7 +80,6 @@ class TestQuiz(TestCase):
 
         self.assertEqual(q5.category.category, self.c1.category)
         self.assertEqual(q5.random_order, False)
-        self.assertEqual(q5.answers_at_end, False)
         self.assertEqual(q5.exam_paper, True)
 
     def test_quiz_single_attempt(self):
@@ -89,12 +93,6 @@ class TestQuiz(TestCase):
 
     def test_get_questions(self):
         self.assertIn(self.question1, self.quiz1.get_questions())
-
-    def test_anon_score_id(self):
-        self.assertEqual(self.quiz1.anon_score_id(), "1_score")
-
-    def test_anon_q_list(self):
-        self.assertEqual(self.quiz1.anon_q_list(), "1_q_list")
 
     def test_pass_mark(self):
         self.assertEqual(self.quiz1.pass_mark, False)
@@ -116,7 +114,7 @@ class TestProgress(TestCase):
         self.question1 = MCQuestion.objects.create(content="squawk", category=self.c1)
 
         self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
+            email="jacob@jacob.com", password="top_secret"
         )
 
         self.p1 = Progress.objects.new_progress(self.user)
@@ -197,7 +195,7 @@ class TestSitting(TestCase):
         )
 
         self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
+            email="jacob@jacob.com", password="top_secret"
         )
 
         self.sitting = Sitting.objects.new_sitting(self.user, self.quiz1)
@@ -361,17 +359,11 @@ class TestNonQuestionViews(TestCase):
         self.assertContains(response, "test quiz 1")
         self.assertNotContains(response, "test quiz 2")
 
-    def test_progress_anon(self):
-        response = self.client.get("/progress/", follow=False)
-        self.assertTemplateNotUsed(response, "progress.html")
-
     def test_progress_user(self):
-        user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
-        )
+        user = User.objects.create_user(email="jacob@jacob.com", password="top_secret")
         question1 = MCQuestion.objects.create(content="squawk", category=self.c1)
 
-        self.client.login(username="jacob", password="top_secret")
+        self.client.login(email="jacob@jacob.com", password="top_secret")
         p1 = Progress.objects.new_progress(user)
         p1.update_score(question1, 1, 2)
 
@@ -395,25 +387,6 @@ class TestNonQuestionViews(TestCase):
         self.assertContains(response, 'href="/tq1/take/"')
         self.assertTemplateUsed(response, "quiz/quiz_detail.html")
 
-    def test_anon_session_score(self):
-        request = HttpRequest()
-        engine = import_module(settings.SESSION_ENGINE)
-        request.session = engine.SessionStore(None)
-        score, possible = anon_session_score(request.session)
-        self.assertEqual((score, possible), (0, 0))
-
-        score, possible = anon_session_score(request.session, 1, 0)
-        self.assertEqual((score, possible), (0, 0))
-
-        score, possible = anon_session_score(request.session, 1, 1)
-        self.assertEqual((score, possible), (1, 1))
-
-        score, possible = anon_session_score(request.session, -0.5, 1)
-        self.assertEqual((score, possible), (0.5, 2))
-
-        score, possible = anon_session_score(request.session)
-        self.assertEqual((score, possible), (0.5, 2))
-
 
 class TestQuestionMarking(TestCase):
     urls = "quiz.urls"
@@ -421,10 +394,10 @@ class TestQuestionMarking(TestCase):
     def setUp(self):
         self.c1 = Category.objects.new_category(category="elderberries")
         self.student = User.objects.create_user(
-            username="luke", email="luke@rebels.com", password="top_secret"
+            email="luke@rebels.com", password="top_secret"
         )
         self.teacher = User.objects.create_user(
-            username="yoda", email="yoda@jedis.com", password="use_d@_force"
+            email="yoda@jedis.com", password="use_d@_force"
         )
         self.teacher.user_permissions.add(
             Permission.objects.get(codename="view_sittings")
@@ -478,7 +451,7 @@ class TestQuestionMarking(TestCase):
 
         self.assertFalse(self.teacher.has_perm("view_sittings", self.student))
 
-        self.client.login(username="luke", password="top_secret")
+        self.client.login(email="luke@rebels.com", password="top_secret")
         response = self.client.get("/marking/")
         self.assertRedirects(
             response,
@@ -487,7 +460,7 @@ class TestQuestionMarking(TestCase):
             target_status_code=404 or 200,
         )
 
-        self.client.login(username="yoda", password="use_d@_force")
+        self.client.login(email="yoda@jedis.com", password="use_d@_force")
         response = self.client.get("/marking/")
         self.assertContains(response, "test quiz 1")
         self.assertContains(response, "test quiz 2")
@@ -495,13 +468,13 @@ class TestQuestionMarking(TestCase):
 
     def test_paper_marking_list_view_filter_user(self):
         new_student = User.objects.create_user(
-            username="chewy", email="chewy@rebels.com", password="maaaawwwww"
+            email="chewy@rebels.com", password="maaaawwwww"
         )
         chewy_sitting = Sitting.objects.new_sitting(new_student, self.quiz1)
         chewy_sitting.complete = True
         chewy_sitting.save()
 
-        self.client.login(username="yoda", password="use_d@_force")
+        self.client.login(email="yoda@jedis.com", password="use_d@_force")
         response = self.client.get("/marking/", {"user_filter": "Hans"})
 
         self.assertNotContains(response, "chewy")
@@ -513,14 +486,14 @@ class TestQuestionMarking(TestCase):
         self.assertNotContains(response, "luke")
 
     def test_paper_marking_list_view_filter_quiz(self):
-        self.client.login(username="yoda", password="use_d@_force")
+        self.client.login(email="yoda@jedis.com", password="use_d@_force")
         response = self.client.get("/marking/", {"quiz_filter": "1"})
 
         self.assertContains(response, "quiz 1")
         self.assertNotContains(response, "quiz 2")
 
     def test_paper_marking_detail_view(self):
-        self.client.login(username="yoda", password="use_d@_force")
+        self.client.login(email="yoda@jedis.com", password="use_d@_force")
         response = self.client.get("/marking/1/")
 
         self.assertContains(response, "test quiz 1")
@@ -538,7 +511,7 @@ class TestQuestionMarking(TestCase):
         sitting3.add_user_answer(question2, "Blah blah blah")
         sitting3.save()
 
-        self.client.login(username="yoda", password="use_d@_force")
+        self.client.login(email="yoda@jedis.com", password="use_d@_force")
         response = self.client.get("/marking/3/")
         self.assertContains(response, "button")
         self.assertNotContains(response, "Correct")
@@ -548,147 +521,6 @@ class TestQuestionMarking(TestCase):
 
         response = self.client.post("/marking/3/", {"qid": 3})
         self.assertNotContains(response, "Correct")
-
-
-class TestQuestionViewsAnon(TestCase):
-    urls = "quiz.urls"
-
-    def setUp(self):
-        self.c1 = Category.objects.new_category(category="elderberries")
-
-        self.quiz1 = Quiz.objects.create(
-            id=1, title="test quiz 1", description="d1", url="tq1", category=self.c1
-        )
-
-        self.question1 = MCQuestion.objects.create(id=1, content="squawk")
-        self.question1.quiz.add(self.quiz1)
-
-        self.question2 = MCQuestion.objects.create(id=2, content="squeek")
-        self.question2.quiz.add(self.quiz1)
-
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.question1, content="bing", correct=False
-        )
-
-        self.answer2 = Answer.objects.create(
-            id=456, question=self.question2, content="bong", correct=True
-        )
-
-    def test_quiz_take_anon_view_only(self):
-        found = resolve("/tq1/take/")
-
-        self.assertEqual(found.kwargs, {"quiz_name": "tq1"})
-        self.assertEqual(found.url_name, "quiz_question")
-
-        response = self.client.get("/tq1/take/")
-
-        self.assertContains(response, "squawk", status_code=200)
-        self.assertEqual(self.client.session.get_expiry_age(), 259200)
-        self.assertEqual(self.client.session["1_q_list"], [1, 2])
-        self.assertEqual(self.client.session["1_score"], 0)
-        self.assertEqual(response.context["quiz"].id, self.quiz1.id)
-        self.assertEqual(response.context["question"].content, self.question1.content)
-        self.assertNotIn("previous", response.context)
-        self.assertTemplateUsed("question.html")
-
-        session = self.client.session
-        session.set_expiry(1)  # session is set when user first starts a
-        session.save()  # quiz, not on subsequent visits
-
-        self.client.get("/tq1/take/")
-        self.assertEqual(self.client.session.get_expiry_age(), 1)
-        self.assertEqual(self.client.session["1_q_list"], [1, 2])
-        self.assertEqual(self.client.session["1_score"], 0)
-
-    def test_image_in_question(self):
-        imgfile = StringIO(
-            "GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,"
-            "\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;"
-        )
-        imgfile.name = "test_img_file.gif"
-
-        self.question1.figure.save("image", ContentFile(imgfile.read()))
-        response = self.client.get("/tq1/take/")
-
-        self.assertContains(response, "<img src=")
-        self.assertContains(response, 'alt="' + str(self.question1.content))
-
-    def test_quiz_take_anon_submit(self):
-        # show first question
-        response = self.client.get("/tq1/take/")
-        self.assertNotContains(response, "previous question")
-        # submit first answer
-        response = self.client.post(
-            "/tq1/take/",
-            {"answers": "123", "question_id": self.client.session["1_q_list"][0]},
-        )
-
-        self.assertContains(response, "previous", status_code=200)
-        self.assertContains(response, "incorrect")
-        self.assertContains(response, "Explanation:")
-        self.assertContains(response, "squeek")
-        self.assertEqual(self.client.session["1_q_list"], [2])
-        self.assertEqual(self.client.session["session_score"], 0)
-        self.assertEqual(self.client.session["session_score_possible"], 1)
-        self.assertEqual(
-            response.context["previous"]["question_type"],
-            {self.question1.__class__.__name__: True},
-        )
-        self.assertIn(self.answer1, response.context["previous"]["answers"])
-        self.assertTemplateUsed("question.html")
-        second_question = response.context["question"]
-
-        # submit second and final answer of quiz, show final result page
-        response = self.client.post(
-            "/tq1/take/",
-            {"answers": "456", "question_id": self.client.session["1_q_list"][0]},
-        )
-
-        self.assertContains(response, "previous question", status_code=200)
-        self.assertNotContains(response, "incorrect")
-        self.assertContains(response, "Explanation:")
-        self.assertContains(response, "results")
-        self.assertNotIn("1_q_list", self.client.session)
-        self.assertEqual(response.context["score"], 1)
-        self.assertEqual(response.context["max_score"], 2)
-        self.assertEqual(response.context["percent"], 50)
-        self.assertEqual(response.context["session"], 1)
-        self.assertEqual(response.context["possible"], 2)
-        self.assertEqual(response.context["previous"]["previous_answer"], "456")
-        self.assertEqual(response.context["previous"]["previous_outcome"], True)
-        self.assertEqual(
-            response.context["previous"]["previous_question"], second_question
-        )
-        self.assertTemplateUsed("result.html")
-
-        # quiz restarts
-        response = self.client.get("/tq1/take/")
-        self.assertNotContains(response, "previous question")
-
-        # session score continues to increase
-        response = self.client.post(
-            "/tq1/take/",
-            {"answers": "123", "question_id": self.client.session["1_q_list"][0]},
-        )
-        self.assertEqual(self.client.session["session_score"], 1)
-        self.assertEqual(self.client.session["session_score_possible"], 3)
-
-    def test_anon_cannot_sit_single_attempt(self):
-        self.quiz1.single_attempt = True
-        self.quiz1.save()
-        response = self.client.get("/tq1/take/")
-
-        self.assertContains(response, "accessible")
-        self.assertTemplateUsed("single_complete.html")
-
-    def test_anon_progress(self):
-        response = self.client.get("/tq1/take/")
-        self.assertEqual(response.context["progress"], (0, 2))
-        response = self.client.post(
-            "/tq1/take/",
-            {"answers": "123", "question_id": self.client.session["1_q_list"][0]},
-        )
-        self.assertEqual(response.context["progress"], (1, 2))
 
 
 class TestQuestionViewsUser(TestCase):
@@ -713,16 +545,15 @@ class TestQuestionViewsUser(TestCase):
             description="d2",
             url="tq2",
             category=self.c1,
-            answers_at_end=True,
             exam_paper=True,
         )
 
         self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
+            email="jacob@jacob.com", password="top_secret"
         )
 
         self.quiz_writer = User.objects.create_user(
-            username="writer", email="writer@x.com", password="secret_top"
+            email="writer@x.com", password="secret_top"
         )
 
         self.question1 = MCQuestion.objects.create(id=1, content="squawk")
@@ -747,13 +578,13 @@ class TestQuestionViewsUser(TestCase):
         sittings_before = Sitting.objects.count()
         self.assertEqual(sittings_before, 0)
 
-        self.client.login(username="jacob", password="top_secret")
+        self.client.login(email="jacob@jacob.com", password="top_secret")
         response = self.client.get("/tq1/take/")
         sitting = Sitting.objects.get(quiz=self.quiz1)
         sittings_after = Sitting.objects.count()
 
         self.assertEqual(sittings_after, 1)
-        self.assertEqual(sitting.user.username, "jacob")
+        self.assertEqual(sitting.user.email, "jacob@jacob.com")
         self.assertEqual(sitting.question_list, "1,2,")
         self.assertEqual(sitting.current_score, 0)
         self.assertEqual(response.context["quiz"].id, self.quiz1.id)
@@ -775,7 +606,7 @@ class TestQuestionViewsUser(TestCase):
         self.assertEqual(sitting.question_list, "1,2,")
 
     def test_quiz_take_user_submit(self):
-        self.client.login(username="jacob", password="top_secret")
+        self.client.login(email="jacob@jacob.com", password="top_secret")
         response = self.client.get("/tq1/take/")
         progress_count = Progress.objects.count()
 
@@ -811,7 +642,7 @@ class TestQuestionViewsUser(TestCase):
         self.assertContains(response, "You have passed")
 
     def test_quiz_take_user_answer_end(self):
-        self.client.login(username="jacob", password="top_secret")
+        self.client.login(email="jacob@jacob.com", password="top_secret")
         response = self.client.post("/tq2/take/", {"answers": "123", "question_id": 1})
         self.assertNotContains(response, "previous question")
 
@@ -837,7 +668,7 @@ class TestQuestionViewsUser(TestCase):
     def test_user_cannot_sit_single_attempt(self):
         self.quiz2.single_attempt = True
         self.quiz2.save()
-        self.client.login(username="jacob", password="top_secret")
+        self.client.login(email="jacob@jacob.com", password="top_secret")
         response = self.client.post("/tq2/take/", {"answers": "123", "question_id": 1})
         response = self.client.post("/tq2/take/", {"answers": True, "question_id": 3})
 
@@ -852,7 +683,7 @@ class TestQuestionViewsUser(TestCase):
             id=10, title="draft quiz", description="draft", url="draft", draft=True
         )
 
-        self.client.login(username="writer", password="secret_top")
+        self.client.login(email="writer@x.com", password="secret_top")
 
         # load without permission
         response_without_perm = self.client.get("/draft/")
@@ -872,12 +703,11 @@ class TestQuestionViewsUser(TestCase):
             description="d3",
             url="tq3",
             category=self.c1,
-            answers_at_end=True,
             exam_paper=True,
         )
         essay = Essay_Question.objects.create(id=4, content="tell all")
         essay.quiz.add(quiz3)
-        self.client.login(username="jacob", password="top_secret")
+        self.client.login(email="jacob@jacob.com", password="top_secret")
 
         response = self.client.post("/tq3/take/")
         self.assertContains(response, "<textarea")
@@ -918,22 +748,11 @@ class TestTemplateTags(TestCase):
         self.question2.quiz.add(self.quiz1)
 
         self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
+            email="jacob@jacob.com", password="top_secret"
         )
 
         self.sitting = Sitting.objects.new_sitting(self.user, self.quiz1)
         self.sitting.current_score = 1
-
-    def test_correct_answer_all_anon(self):
-        template = Template(
-            "{% load quiz_tags %}" + "{% correct_answer_for_all question %}"
-        )
-
-        context = Context({"question": self.question1})
-
-        self.assertTemplateUsed("correct_answer.html")
-        self.assertIn("bing", template.render(context))
-        self.assertNotIn("incorrectly", template.render(context))
 
     def test_correct_answer_all_user(self):
         template = Template(
