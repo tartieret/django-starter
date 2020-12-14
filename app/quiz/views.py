@@ -8,13 +8,14 @@ from django.views.generic import DetailView, ListView, TemplateView, FormView
 
 from .forms import QuestionForm, EssayForm
 from .models import (
-    Quiz,
     Category,
+    Essay_Question,
     Progress,
+    Question,
+    Quiz,
     Sitting,
     SittingMode,
-    Question,
-    Essay_Question,
+    UserAnswer,
 )
 
 
@@ -152,7 +153,6 @@ class QuizTake(LoginRequiredMixin, FormView):
         if self.quiz.draft and not request.user.has_perm("quiz.change_quiz"):
             raise PermissionDenied
 
-        self.logged_in_user = self.request.user.is_authenticated
         self.sitting = Sitting.objects.user_sitting(request.user, self.quiz, self.mode)
 
         if not self.sitting:
@@ -249,3 +249,79 @@ class SittingList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user)
+
+
+class SittingQuestion(LoginRequiredMixin, FormView):
+    form_class = QuestionForm
+    template_name = "sitting_question.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        sitting_id = self.kwargs.get("sitting_id")
+        question_order = self.kwargs.get("question_order")
+
+        # retrieve the current sitting
+        self.sitting = get_object_or_404(Sitting, user=request.user, pk=sitting_id)
+        self.mode = self.sitting.mode
+        # retrieve the current question
+        question_order = self.kwargs.get("question_order")
+        self.user_answer = get_object_or_404(
+            UserAnswer, user=request.user, sitting=sitting_id, order=question_order
+        )
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form(self, *args, **kwargs):
+        self.question = Question.objects.get_subclass(pk=self.user_answer.question_id)
+
+        if isinstance(self.question, Essay_Question):
+            form_class = EssayForm
+        else:
+            form_class = self.form_class
+
+        return form_class(**self.get_form_kwargs())
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        return dict(kwargs, question=self.question)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["sitting"] = self.sitting
+        context["question"] = self.question
+        context["user_answer"] = self.user_answer
+        context["quiz"] = self.sitting.quiz
+        # if hasattr(self, "previous"):
+        #     context["previous"] = self.previous
+        # if hasattr(self, "progress"):
+        #     context["progress"] = self.progress
+        context["active_tab"] = "question"
+        context["nb_questions"] = self.sitting.get_nb_questions()
+        return context
+
+
+class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):
+    template_name = "sitting_question_explanation.html"
+
+    def get(self, request, *args, **kwargs):
+        sitting_id = self.kwargs.get("sitting_id")
+        question_order = self.kwargs.get("question_order")
+        # retrieve the current sitting
+        self.sitting = get_object_or_404(Sitting, user=self.request.user, pk=sitting_id)
+        self.mode = self.sitting.mode
+        # retrieve the current question
+        question_order = self.kwargs.get("question_order")
+        self.user_answer = get_object_or_404(
+            UserAnswer, user=self.request.user, sitting=sitting_id, order=question_order
+        )
+        self.question = Question.objects.get_subclass(pk=self.user_answer.question_id)
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["question"] = self.question
+        context["sitting"] = self.sitting
+        context["user_answer"] = self.user_answer
+        context["quiz"] = self.sitting.quiz
+        context["active_tab"] = "explanation"
+        context["nb_questions"] = self.sitting.get_nb_questions()
+        return context

@@ -29,18 +29,17 @@ class SittingManager(models.Manager):
         else:
             question_set = quiz.question_set.all().select_subclasses()
 
-        question_set = [item.id for item in question_set]
+        if quiz.max_questions and quiz.max_questions < question_set.count():
+            question_set = question_set[: quiz.max_questions]
 
         if len(question_set) == 0:
             raise ImproperlyConfigured(
-                "Question set of the quiz is empty. "
+                "This quiz does not contain any question. "
                 "Please configure questions properly"
             )
 
-        if quiz.max_questions and quiz.max_questions < len(question_set):
-            question_set = question_set[: quiz.max_questions]
-
-        questions = ",".join(map(str, question_set)) + ","
+        question_ids = [item.id for item in question_set]
+        questions = ",".join(map(str, question_ids)) + ","
 
         new_sitting = self.create(
             user=user,
@@ -53,6 +52,17 @@ class SittingManager(models.Manager):
             complete=False,
             user_answers="{}",
         )
+
+        # generate default user answers
+        UserAnswer.objects.bulk_create(
+            [
+                UserAnswer(
+                    question=question, user=user, sitting=new_sitting, order=i + 1
+                )
+                for i, question in enumerate(question_set)
+            ]
+        )
+
         return new_sitting
 
     def user_sitting(self, user, quiz, mode=SittingMode.STUDY):
@@ -269,6 +279,9 @@ class Sitting(models.Model):
         answered = len(json.loads(self.user_answers))
         total = self.get_max_score
         return answered, total
+
+    def get_nb_questions(self):
+        return UserAnswer.objects.filter(sitting=self).count()
 
 
 class UserAnswer(models.Model):

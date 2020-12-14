@@ -1,0 +1,54 @@
+{% extends 'app.html' %}
+{% load static i18n compress%}
+
+{% load quiz_tags %}
+
+{% block title %} {{ quiz.title }} {% endblock %}
+{% block description %} {{ quiz.title }} - {{ quiz.description }} {% endblock %}
+
+{% block page_title %}{{ quiz.title }} {% endblock %}
+{% block page_subtitle %}
+    {% trans "Question" %} {{ user_answer.order }} {% trans "of" %} {{ nb_questions }}
+{% endblock %}
+
+{% block inner %}
+    <div class="container space-bottom-3">
+      <div class="col-sm-12 col-md-10 mx-auto">
+
+      <div class="row space-bottom-1">
+
+      <div class="d-flex flex-wrap">
+      {% with ''|center:40 as range %}
+        {% for _ in range %}
+          <a class="item-wrapper " href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
+        {% endfor %}
+        {% endwith %}
+      </div>
+
+      </div>
+
+      {% if sitting.mode == 'study' %}
+      <div class="row space-bottom-1">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'question' %}active{% endif %}" href="{% url 'quiz:sitting_question' sitting.id user_answer.order %}">Question</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'explanation' %}active{% endif %}" href="{% url 'quiz:sitting_question_explanation' sitting.id user_answer.order %}">Explanation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'comments' %}active{% endif %}" href="#">Comments</a>
+          </li>
+        </ul>
+        <!-- End tabs -->
+      </div>
+      {% endif %}
+
+      {% block tabcontent %}
+
+      {% endblock %}
+    </div>
+    </div>
+
+{% endblock %}
