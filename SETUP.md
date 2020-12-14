@@ -55,7 +55,7 @@ You can now control the Postgresql server.
 First, create a database for your project:
 
 ```Postgres
-CREATE DATABASE logbook;
+CREATE DATABASE a320expert;
 ```
 
 **Note:** Every Postgres statement must end with a semi-colon, so make sure that your command ends with one if you are experiencing issues.
@@ -79,7 +79,7 @@ ALTER ROLE sqladmin SET timezone TO 'UTC';
 Now, we can give our new user access to administer our new database:
 
 ```Postgres
-GRANT ALL PRIVILEGES ON DATABASE logbook TO sqladmin;
+GRANT ALL PRIVILEGES ON DATABASE a320expert TO sqladmin;
 ```
 
 Allow the sql user to create a new database for testing:
@@ -109,7 +109,7 @@ Once this is done, you now have a PostgreSQL database.
 Create a ".env" file at the root of the project, and define the following environment variables in it:
 
 ```
-export DATABASE_URL=postgres://sqladmin:cholet49300@127.0.0.1:5432/logbook
+export DATABASE_URL=postgres://sqladmin:cholet49300@127.0.0.1:5432/a320expert
 export CELERY_BROKER_URL=redis://localhost:6379/0
 ```
 
