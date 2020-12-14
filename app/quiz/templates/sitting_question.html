@@ -1,0 +1,40 @@
+{% extends 'sitting_question_base.html' %}
+{% load i18n %}
+
+{% block tabcontent %}
+
+  <div class="row">
+    <div class="col">
+
+  {% if question %}
+
+        <p>
+          <small class="muted">{% trans "Question category" %}:</small>
+          <strong>{{ question.category }}</strong>
+        </p>
+
+        <p class="lead">{{ question.content|safe }}</p>
+
+        {% if question.figure %}
+            <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
+        {% endif %}
+
+        <form action="" method="POST">{% csrf_token %}
+          <input type=hidden name="question_id" value="{{ question.id }}">
+
+          <ul class="list-group mb-4">
+
+          {% for answer in form.answers %}
+            <li class="list-group-item">
+              {{ answer }}
+            </li>
+          {% endfor %}
+
+          </ul>
+          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-info" >
+        </form>
+
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

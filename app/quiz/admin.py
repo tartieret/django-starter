@@ -16,6 +16,7 @@ from .models import (
     Sitting,
     SubCategory,
     TF_Question,
+    UserAnswer,
 )
 
 
@@ -180,8 +181,13 @@ class EssayQuestionAdmin(admin.ModelAdmin):
     filter_horizontal = ("quiz",)
 
 
+class UserAnswerInline(admin.TabularInline):
+    model = UserAnswer
+
+
 class SittingAdmin(admin.ModelAdmin):
     list_display = ("user", "quiz", "start", "end", "complete", "get_percent_correct")
+    inlines = [UserAnswerInline]
 
 
 admin.site.register(Sitting, SittingAdmin)
