@@ -24,6 +24,13 @@
         {% endfor %}
         {% endwith %}
       </div>
+      <ul class="list-group list-group-horizontal">
+      {% with ''|center:nb_questions as range %}
+        {% for _ in range %}
+          <a class="list-group-item" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
+        {% endfor %}
+        {% endwith %}
+      </ul>
 
       </div>
 
