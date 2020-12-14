@@ -13,6 +13,7 @@ from .models import (
     Quiz,
     MCQuestion,
     Progress,
+    Sitting,
     SubCategory,
     TF_Question,
 )
@@ -179,6 +180,11 @@ class EssayQuestionAdmin(admin.ModelAdmin):
     filter_horizontal = ("quiz",)
 
 
+class SittingAdmin(admin.ModelAdmin):
+    list_display = ("user", "quiz", "start", "end", "complete", "get_percent_correct")
+
+
+admin.site.register(Sitting, SittingAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
