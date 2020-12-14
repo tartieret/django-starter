@@ -1,54 +1,74 @@
 {% extends 'app.html' %}
-{% load i18n %}
-{% block title %}{% trans "All Quizzes" %}{% endblock %}
+{% load static i18n %}
+{% block title %}{% trans "All your test results" %}{% endblock %}
 
 {% block inner %}
-<h2>{% trans "List of complete exams" %}</h2>
-    {% if sitting_list %}
 
-		<table class="table table-bordered table-striped">
+<!-- ========== MAIN ========== -->
+<main id="content" role="main">
 
-		  <thead>
-			<tr>
-			  <th>{% trans "User" %}</th>
-			  <th>{% trans "Quiz" %}</th>
-			  <th>{% trans "Completed" %}</th>
-			  <th>{% trans "Score" %}(%)</th>
-			  <th></th>
-			</tr>
-		  </thead>
+    <!-- Hero Section -->
+    <div class="position-relative">
+      <div class="bg-img-hero" style="background-image: url({% static 'svg/components/abstract-shapes-12.svg'%});">
+        <div class="container space-top-3 space-top-lg-2 space-bottom-1 position-relative z-index-2">
+          <div class="w-md-80 w-lg-60 text-center mx-md-auto mb-5 mb-md-9">
+            <h1>{% trans "List of complete exams" %}</h1>
+          </div>
 
-		  <tbody>
-			<tr>
-			  <form action="" method="GET">
-				<td><input type="text" name="user_filter" /></td>
-				<td><input type="text" name="quiz_filter" /></td>
-				<td></td>
-				<td></td>
-				<td><button type="submit" class="btn btn-default">{% trans "Filter"%}</button></td>
-			  </form>
-			</tr>
+        </div>
+      </div>
 
+      <!-- SVG Shape -->
+      <figure class="position-absolute bottom-0 right-0 left-0">
+        <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1921 273">
+          <polygon fill="#fff" points="0,273 1921,273 1921,0 "/>
+        </svg>
+      </figure>
+      <!-- End SVG Shape -->
+    </div>
+    <!-- End Hero Section -->
 
-        {% for sitting in sitting_list %}
+    <div class="container space-bottom-3">
+      <div class="mx-auto">
 
-			<tr>
-			  <td>{{ sitting.user }}</td>
-			  <td>{{ sitting.quiz }}</td>
-			  <td>{{ sitting.end|date }}</td>
-			  <td>{{ sitting.get_percent_correct }}</td>
-			  <td>
-				<a href="{% url 'quiz:quiz_marking_detail' pk=sitting.id %}">
-				  {% trans "View details" %}
-				</a>
-			</tr>
+      {% if sitting_list %}
+        <table class="table table-bordered table-striped">
 
-        {% endfor %}
+          <thead>
+          <tr>
+            <th>{% trans "Quiz" %}</th>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Score" %}</th>
+            <th></th>
+          </tr>
+          </thead>
 
-		  </tbody>
+          <tbody>
 
-		</table>
-    {% else %}
-        <p>{% trans "There are no matching quizzes" %}.</p>
-    {% endif %}
+            {% for sitting in sitting_list %}
+
+            <tr>
+            <td>{{ sitting.quiz }}</td>
+            <td>{{ sitting.end|date }}</td>
+            <td>{{ sitting.get_percent_correct }}</td>
+            <td>
+            {% comment %} <a href="{% url 'quiz:quiz_start_page' slug=quiz.url %}">
+              {% trans "View details" %}
+            </a> {% endcomment %}
+            </td>
+          </tr>
+
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      {% else %}
+          <p>{% trans "You did not take any exam" %}.</p>
+      {% endif %}
+
+      </div>
+
+  </div>
+</main>
 {% endblock %}
