@@ -7,7 +7,7 @@ from app.quiz.views import (
     QuizMarkingDetail,
     QuizMarkingList,
     QuizUserProgressView,
-    QuizTake,
+    QuizStart,
     SittingList,
     ViewQuizListByCategory,
     SittingQuestion,
@@ -46,6 +46,6 @@ urlpatterns = [
     #  passes variable 'quiz_name' to quiz_take view
     url(r"^(?P<slug>[\w-]+)/$", view=QuizDetailView.as_view(), name="quiz_start_page"),
     url(
-        r"^(?P<quiz_name>[\w-]+)/take/$", view=QuizTake.as_view(), name="quiz_question"
+        r"^(?P<quiz_name>[\w-]+)/take/$", view=QuizStart.as_view(), name="quiz_question"
     ),
 ]

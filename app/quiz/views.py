@@ -3,10 +3,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView, ListView, TemplateView, FormView
+from django.views.generic import (
+    DetailView,
+    ListView,
+    TemplateView,
+    FormView,
+    RedirectView,
+)
 
-from .forms import QuestionForm, EssayForm
+from .forms import MCQuestionForm, EssayForm
 from .models import (
     Category,
     Essay_Question,
@@ -136,15 +143,120 @@ class QuizMarkingDetail(LoginRequiredMixin, QuizMarkerMixin, DetailView):
         return context
 
 
-class QuizTake(LoginRequiredMixin, FormView):
-    form_class = QuestionForm
-    template_name = "question.html"
-    result_template_name = "result.html"
-    single_complete_template_name = "single_complete.html"
+# class QuizStart(LoginRequiredMixin, FormView):
+#     form_class = QuestionForm
+#     # template_name = "question.html"
+#     # result_template_name = "result.html"
+#     # single_complete_template_name = "single_complete.html"
+
+#     def dispatch(self, request, *args, **kwargs):
+#         self.quiz = get_object_or_404(Quiz, url=self.kwargs["quiz_name"])
+
+#         # find out if it's study or exam mode
+#         self.mode = request.GET.get("mode", SittingMode.STUDY)
+#         if not SittingMode.is_valid(self.mode):
+#             raise Http404
+
+#         if self.quiz.draft and not request.user.has_perm("quiz.change_quiz"):
+#             raise PermissionDenied
+
+#         self.sitting = Sitting.objects.user_sitting(request.user, self.quiz, self.mode)
+
+#         if not self.sitting:
+#             return render(request, self.single_complete_template_name)
+
+#         return super().dispatch(request, *args, **kwargs)
+
+#     def get_form(self, *args, **kwargs):
+#         self.question = self.sitting.get_first_question()
+#         self.progress = self.sitting.progress()
+
+#         if self.question.__class__ is Essay_Question:
+#             form_class = EssayForm
+#         else:
+#             form_class = self.form_class
+
+#         return form_class(**self.get_form_kwargs())
+
+#     def get_form_kwargs(self):
+#         kwargs = super(QuizTake, self).get_form_kwargs()
+#         return dict(kwargs, question=self.question)
+
+#     def form_valid(self, form):
+#         self.form_valid_user(form)
+#         if self.sitting.get_first_question() is False:
+#             return self.final_result_user()
+
+#         self.request.POST = {}
+#         return super().get(self, self.request)
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["question"] = self.question
+#         context["quiz"] = self.quiz
+#         if hasattr(self, "previous"):
+#             context["previous"] = self.previous
+#         if hasattr(self, "progress"):
+#             context["progress"] = self.progress
+#         return context
+
+#     def form_valid_user(self, form):
+#         progress, c = Progress.objects.get_or_create(user=self.request.user)
+#         guess = form.cleaned_data["answers"]
+#         is_correct = self.question.check_if_correct(guess)
+
+#         if is_correct is True:
+#             self.sitting.add_to_score(1)
+#             progress.update_score(self.question, 1, 1)
+#         else:
+#             self.sitting.add_incorrect_question(self.question)
+#             progress.update_score(self.question, 0, 1)
+
+#         if self.sitting.mode == SittingMode.STUDY:
+#             # in study mode, we show the answer to the previous question
+#             self.previous = {
+#                 "previous_answer": guess,
+#                 "previous_outcome": is_correct,
+#                 "previous_question": self.question,
+#                 "answers": self.question.get_answers(),
+#                 "question_type": {self.question.__class__.__name__: True},
+#             }
+#         else:
+#             self.previous = {}
+
+#         self.sitting.add_user_answer(self.question, guess)
+#         self.sitting.remove_first_question()
+
+#     # def final_result_user(self):
+#     #     results = {
+#     #         "quiz": self.quiz,
+#     #         "score": self.sitting.get_current_score,
+#     #         "max_score": self.sitting.get_max_score,
+#     #         "percent": self.sitting.get_percent_correct,
+#     #         "sitting": self.sitting,
+#     #         "previous": self.previous,
+#     #     }
+
+#     #     self.sitting.mark_quiz_complete()
+
+#     #     if self.sitting.mode == SittingMode.EXAM:
+#     #         results["questions"] = self.sitting.get_questions(with_answers=True)
+#     #         results["incorrect_questions"] = self.sitting.get_incorrect_questions
+
+#     #     if self.quiz.exam_paper is False:
+#     #         self.sitting.delete()
+
+#     #     results["mode"] = self.sitting.mode
+#     #     return render(self.request, self.result_template_name, results)
+
+
+class QuizStart(LoginRequiredMixin, RedirectView):
+    """Start a new sitting and redirect to the first question"""
+
+    permanent = False
 
     def dispatch(self, request, *args, **kwargs):
         self.quiz = get_object_or_404(Quiz, url=self.kwargs["quiz_name"])
-
         # find out if it's study or exam mode
         self.mode = request.GET.get("mode", SittingMode.STUDY)
         if not SittingMode.is_valid(self.mode):
@@ -160,87 +272,9 @@ class QuizTake(LoginRequiredMixin, FormView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get_form(self, *args, **kwargs):
-        self.question = self.sitting.get_first_question()
-        self.progress = self.sitting.progress()
-
-        if self.question.__class__ is Essay_Question:
-            form_class = EssayForm
-        else:
-            form_class = self.form_class
-
-        return form_class(**self.get_form_kwargs())
-
-    def get_form_kwargs(self):
-        kwargs = super(QuizTake, self).get_form_kwargs()
-        return dict(kwargs, question=self.question)
-
-    def form_valid(self, form):
-        self.form_valid_user(form)
-        if self.sitting.get_first_question() is False:
-            return self.final_result_user()
-
-        self.request.POST = {}
-        return super().get(self, self.request)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["question"] = self.question
-        context["quiz"] = self.quiz
-        if hasattr(self, "previous"):
-            context["previous"] = self.previous
-        if hasattr(self, "progress"):
-            context["progress"] = self.progress
-        return context
-
-    def form_valid_user(self, form):
-        progress, c = Progress.objects.get_or_create(user=self.request.user)
-        guess = form.cleaned_data["answers"]
-        is_correct = self.question.check_if_correct(guess)
-
-        if is_correct is True:
-            self.sitting.add_to_score(1)
-            progress.update_score(self.question, 1, 1)
-        else:
-            self.sitting.add_incorrect_question(self.question)
-            progress.update_score(self.question, 0, 1)
-
-        if self.sitting.mode == SittingMode.STUDY:
-            # in study mode, we show the answer to the previous question
-            self.previous = {
-                "previous_answer": guess,
-                "previous_outcome": is_correct,
-                "previous_question": self.question,
-                "answers": self.question.get_answers(),
-                "question_type": {self.question.__class__.__name__: True},
-            }
-        else:
-            self.previous = {}
-
-        self.sitting.add_user_answer(self.question, guess)
-        self.sitting.remove_first_question()
-
-    def final_result_user(self):
-        results = {
-            "quiz": self.quiz,
-            "score": self.sitting.get_current_score,
-            "max_score": self.sitting.get_max_score,
-            "percent": self.sitting.get_percent_correct,
-            "sitting": self.sitting,
-            "previous": self.previous,
-        }
-
-        self.sitting.mark_quiz_complete()
-
-        if self.sitting.mode == SittingMode.EXAM:
-            results["questions"] = self.sitting.get_questions(with_answers=True)
-            results["incorrect_questions"] = self.sitting.get_incorrect_questions
-
-        if self.quiz.exam_paper is False:
-            self.sitting.delete()
-
-        results["mode"] = self.sitting.mode
-        return render(self.request, self.result_template_name, results)
+    def get_redirect_url(self, *args, **kwargs):
+        url = reverse("quiz:sitting_question", args=[self.sitting.id, 1])
+        return url
 
 
 class SittingList(LoginRequiredMixin, ListView):
@@ -252,7 +286,6 @@ class SittingList(LoginRequiredMixin, ListView):
 
 
 class SittingQuestion(LoginRequiredMixin, FormView):
-    form_class = QuestionForm
     template_name = "sitting_question.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -280,8 +313,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         if isinstance(self.question, Essay_Question):
             form_class = EssayForm
         else:
-            form_class = self.form_class
-
+            form_class = MCQuestionForm
         return form_class(**self.get_form_kwargs())
 
     def get_form_kwargs(self):

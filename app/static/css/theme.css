@@ -26337,9 +26337,14 @@ a:hover .text-hover-primary {
 .nav-question {
   position: relative;
   display: block;
-  padding: 0.75rem 0.75rem;
+  padding: 0.25rem 0.25rem;
   background-color: #fff;
   border: 0.0625rem solid #e7eaf3;
-  width: 50px;
+  width: 40px;
   text-align: center;
+}
+
+.nav-question__current {
+  background-color: blue;
+  color: white;
 }

@@ -2,12 +2,15 @@ from django import forms
 from django.forms.widgets import RadioSelect, Textarea, CheckboxSelectMultiple
 
 
-class QuestionForm(forms.Form):
+class MCQuestionForm(forms.Form):
     def __init__(self, question, *args, **kwargs):
         super().__init__(*args, **kwargs)
         choice_list = [x for x in question.get_answers_list()]
 
-        if question.allow_multiple_answers:
+        if (
+            hasattr(question, "allow_multiple_answers")
+            and question.allow_multiple_answers
+        ):
             # show checkboxes
             self.fields["answers"] = forms.MultipleChoiceField(
                 choices=choice_list, widget=CheckboxSelectMultiple

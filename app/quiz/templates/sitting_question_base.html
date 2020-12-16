@@ -18,9 +18,9 @@
       <div class="row space-bottom-1">
 
         <div class="d-flex flex-wrap">
-        {% with ''|center:40 as range %}
+        {% with ''|center:nb_questions as range %}
           {% for _ in range %}
-            <a class="nav-question" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
+            <a class="nav-question {% if forloop.counter == user_answer.order %} bg-primary text-white {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
           {% endfor %}
           {% endwith %}
         </div>
