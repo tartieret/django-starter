@@ -9,6 +9,7 @@ from app.quiz.views import (
     QuizStart,
     QuizUserProgressView,
     SittingDelete,
+    SittingFinish,
     SittingList,
     SittingQuestion,
     SittingQuestionExplanation,
@@ -44,6 +45,11 @@ urlpatterns = [
         "sitting/<int:sitting_id>/delete",
         view=SittingDelete.as_view(),
         name="sitting_delete",
+    ),
+    path(
+        "sitting/<int:sitting_id>/finish",
+        view=SittingFinish.as_view(),
+        name="sitting_finish",
     ),
     path(
         "sitting/<int:sitting_id>/<int:question_order>/",

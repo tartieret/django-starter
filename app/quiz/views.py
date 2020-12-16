@@ -13,8 +13,10 @@ from django.views.generic import (
     FormView,
     ListView,
     RedirectView,
-    TemplateView
+    TemplateView,
+    View
 )
+from django.views.generic.detail import SingleObjectMixin
 
 from .forms import MCQuestionForm, EssayForm
 from .models import (
@@ -190,18 +192,71 @@ class SittingList(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user)
 
+class SittingFinish(LoginRequiredMixin, SingleObjectMixin, View):
 
-class SittingResults(LoginRequiredMixin, DetailView):
-    """Show the results for a given sitting"""
-
-    template_name = "result.html"
     pk_url_kwarg = "sitting_id"
     model = Sitting
 
     def get_queryset(self):
         """Restrict the list of sittings to the ones belonging to the current user"""
         queryset = super().get_queryset()
-        return queryset.filter(user=self.request.user, complete=True)
+        queryset = queryset.filter(user=self.request.user, complete=False)
+        return queryset
+
+    def post(self, request, *args, **kwargs):
+        """On POST, mark the sitting as complete"""
+        sitting = self.get_object()
+        print("Selected object: ", sitting)
+        unanswered_questions = sitting.get_unanswered_questions()
+        if len(unanswered_questions) > 0:
+            # invalid, go back to unanswered questions
+            url = reverse(
+                    "quiz:sitting_question",
+                    args=[sitting.id, unanswered_questions[0]],
+                )
+            return HttpResponseRedirect(url)
+        else:
+            sitting.mark_quiz_complete()
+            sitting.save()
+            print("Mark sitting as completed")
+            url = reverse(
+                    "quiz:sitting_results",
+                    args=[sitting.id],
+                )
+            return HttpResponseRedirect(url)
+
+
+
+class SittingResults(LoginRequiredMixin, DetailView):
+    """Show the results for a given sitting"""
+    template_name = "result.html"
+    pk_url_kwarg = "sitting_id"
+    model = Sitting
+
+    def post(self, request, *args, **kwargs):
+        """On POST, mark the sitting as complete"""
+        self.object = self.get_object()
+        print("Selected object: ", self.object)
+        unanswered_questions = self.object.get_unanswered_questions()
+        if len(unanswered_questions) > 0:
+            # invalid, go back to unanswered questions
+            url = reverse(
+                    "quiz:sitting_question",
+                    args=[self.object.id, unanswered_questions[0]],
+                )
+            return HttpResponseRedirect(url)
+        else:
+            self.object.mark_quiz_complete()
+            self.object.save()
+            print("Mark sitting as completed")
+            request.POST = {}
+            return super().get(self, request)
+
+    def get_queryset(self):
+        """Restrict the list of sittings to the ones belonging to the current user"""
+        queryset = super().get_queryset()
+        queryset = queryset.filter(user=self.request.user, complete=True)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -301,10 +356,10 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         else:
             self.user_answer.is_correct = False
 
-        # check if the quiz is completed or not
-        answered, total = self.sitting.progress()
-        if answered == total:
-            self.sitting.mark_quiz_complete()
+        # # in study mode, if all questions are answered mark the quiz as completed
+        # answered, total = self.sitting.progress()
+        # if self.sitting.mode == SittingMode.STUDY and answered == total:
+        #     self.sitting.mark_quiz_complete()
 
         self.sitting.save()
         self.user_answer.save()
