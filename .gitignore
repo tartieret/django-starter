@@ -291,3 +291,4 @@ logbook/media/
 .env
 .envs/*
 !.envs/.local/
+production.env

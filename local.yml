@@ -24,6 +24,10 @@ services:
     command: /start
     restart: always
 
+  redis:
+    image: redis:5.0
+    container_name: a320expert_redis
+
   postgres:
     build:
       context: .

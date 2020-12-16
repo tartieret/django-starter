@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+import os
 from pathlib import Path
 
 import environ
@@ -11,9 +12,14 @@ APPS_DIR = ROOT_DIR / "app"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
+# define the file that contains the environment variables, if any
+ENV_FILE = env.str('ENV_FILE', default=".env")
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
-    env.read_env(str(ROOT_DIR / ".env"))
+    path = str(ROOT_DIR / ENV_FILE)
+    if os.path.exists(path):
+        print(f"Load environment from {ENV_FILE}")
+        env.read_env(str(ROOT_DIR / ENV_FILE))
 
 # GENERAL
 # ------------------------------------------------------------------------------

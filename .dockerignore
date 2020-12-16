@@ -2,3 +2,6 @@
 !.coveragerc
 !.env
 !.pylintrc
+
+.env
+production.env
