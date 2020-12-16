@@ -258,8 +258,12 @@ class Sitting(models.Model):
         total = self.get_max_score
         return answered, total
 
-    def get_nb_questions(self):
+    def get_nb_questions(self) -> int:
         return len(self._question_ids())
+
+    def get_nb_unanswered_questions(self) -> int:
+        answered, total = self.progress()
+        return total - answered
 
     def get_score_list(self) -> list:
         """Return a list of 0,1,? based on the fact that

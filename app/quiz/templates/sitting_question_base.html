@@ -32,7 +32,11 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 text-right">
           <button type="button" class="btn btn-ghost-danger" data-toggle="modal" data-target="#cancelSittingConfirm">{% trans "Cancel" %}</button>
-          <button type="button" class="btn btn-outline-secondary">{% trans "Finish" %}</button>
+          {% if nb_unanswered_questions == 0 %}
+            <button type="button" class="btn btn-primary">{% trans "Finish" %}</button>
+          {% else %}
+            <button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="{% trans "Answer all the questions to finish the test" %}" disabled>{% trans "Finish" %}</button>
+          {% endif %}
         </div>
       </div>
 

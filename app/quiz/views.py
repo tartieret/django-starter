@@ -13,7 +13,7 @@ from django.views.generic import (
     FormView,
     ListView,
     RedirectView,
-    TemplateView,
+    TemplateView
 )
 
 from .forms import MCQuestionForm, EssayForm
@@ -264,6 +264,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         context["active_tab"] = "question"
         context["actual_answers"] = self.question.get_answers()
         context["nb_questions"] = self.sitting.get_nb_questions()
+        context["nb_unanswered_questions"] = self.sitting.get_nb_unanswered_questions()
         return context
 
     def form_valid(self, form):
@@ -347,4 +348,5 @@ class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):
         context["active_tab"] = "explanation"
         context["nb_questions"] = self.sitting.get_nb_questions()
         context["score_list"] = self.sitting.get_score_list()
+        context["nb_unanswered_questions"] = self.sitting.get_nb_unanswered_questions()
         return context
