@@ -8,10 +8,10 @@
 
     {% if question %}
 
-      <p>
+      {% comment %} <p>
         <small class="muted">{% trans "Question category" %}:</small>
         <strong>{{ question.category }}</strong>
-      </p>
+      </p> {% endcomment %}
 
       <p class="lead">{{ question.content|safe }}</p>
 
