@@ -121,26 +121,26 @@ class QuizMarkingList(
         return queryset
 
 
-class QuizMarkingDetail(LoginRequiredMixin, QuizMarkerMixin, DetailView):
-    model = Sitting
+# class QuizMarkingDetail(LoginRequiredMixin, QuizMarkerMixin, DetailView):
+#     model = Sitting
 
-    def post(self, request, *args, **kwargs):
-        sitting = self.get_object()
+#     def post(self, request, *args, **kwargs):
+#         sitting = self.get_object()
 
-        q_to_toggle = request.POST.get("qid", None)
-        if q_to_toggle:
-            q = Question.objects.get_subclass(id=int(q_to_toggle))
-            if int(q_to_toggle) in sitting.get_incorrect_questions:
-                sitting.remove_incorrect_question(q)
-            else:
-                sitting.add_incorrect_question(q)
+#         q_to_toggle = request.POST.get("qid", None)
+#         if q_to_toggle:
+#             q = Question.objects.get_subclass(id=int(q_to_toggle))
+#             if int(q_to_toggle) in sitting.get_incorrect_questions:
+#                 sitting.remove_incorrect_question(q)
+#             else:
+#                 sitting.add_incorrect_question(q)
 
-        return self.get(request)
+#         return self.get(request)
 
-    def get_context_data(self, **kwargs):
-        context = super(QuizMarkingDetail, self).get_context_data(**kwargs)
-        context["questions"] = context["sitting"].get_questions(with_answers=True)
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(QuizMarkingDetail, self).get_context_data(**kwargs)
+#         context["questions"] = context["sitting"].get_questions(with_answers=True)
+#         return context
 
 
 # class QuizStart(LoginRequiredMixin, FormView):
@@ -285,6 +285,31 @@ class SittingList(LoginRequiredMixin, ListView):
         return queryset.filter(user=self.request.user)
 
 
+class SittingResults(LoginRequiredMixin, DetailView):
+    """Show the results for a given sitting"""
+
+    template_name = "result.html"
+    pk_url_kwarg = "sitting_id"
+    model = Sitting
+
+    def get_queryset(self):
+        """Restrict the list of sittings to the ones belonging to the current user"""
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context = {
+            **context,
+            "quiz": self.object.quiz,
+            "score": self.object.get_current_score,
+            "max_score": self.object.get_max_score,
+            "percent": self.object.get_percent_correct,
+            "sitting": self.object,
+        }
+        return context
+
+
 class SittingQuestion(LoginRequiredMixin, FormView):
     template_name = "sitting_question.html"
 
@@ -333,6 +358,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         # check the user answer
         self.validate_answer(form)
+
         if self.sitting.mode == SittingMode.STUDY:
             # stay on the same question and show the result
             self.request.POST = {}
@@ -349,15 +375,20 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         self.user_answer.answer = form.cleaned_data["answers"]
         is_correct = self.question.check_if_correct(self.user_answer.answer)
 
+        self.sitting.add_user_progress(self.user_answer.order, is_correct)
+
         if is_correct is True:
             self.sitting.add_to_score(1)
             self.user_answer.is_correct = True
-            # progress.update_score(self.question, 1, 1)
         else:
-            self.sitting.add_incorrect_question(self.question)
-            # progress.update_score(self.question, 0, 1)
             self.user_answer.is_correct = False
 
+        # check if the quiz is completed or not
+        answered, total = self.sitting.progress()
+        if answered == total:
+            self.sitting.mark_quiz_complete()
+
+        self.sitting.save()
         self.user_answer.save()
 
     def get_success_url(self):

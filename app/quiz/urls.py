@@ -4,14 +4,15 @@ from app.quiz.views import (
     CategoriesListView,
     QuizDetailView,
     QuizListView,
-    QuizMarkingDetail,
-    QuizMarkingList,
+    # QuizMarkingDetail,
+    # QuizMarkingList,
     QuizUserProgressView,
     QuizStart,
     SittingList,
     ViewQuizListByCategory,
     SittingQuestion,
     SittingQuestionExplanation,
+    SittingResults,
 )
 
 app_name = "quiz"
@@ -26,13 +27,18 @@ urlpatterns = [
         name="quiz_category_list_matching",
     ),
     url(r"^progress/$", view=QuizUserProgressView.as_view(), name="quiz_progress"),
-    url(r"^marking/$", view=QuizMarkingList.as_view(), name="quiz_marking"),
-    url(
-        r"^marking/(?P<pk>[\d.]+)/$",
-        view=QuizMarkingDetail.as_view(),
-        name="quiz_marking_detail",
-    ),
+    # url(r"^marking/$", view=QuizMarkingList.as_view(), name="quiz_marking"),
+    # url(
+    #     r"^marking/(?P<pk>[\d.]+)/$",
+    #     view=QuizMarkingDetail.as_view(),
+    #     name="quiz_marking_detail",
+    # ),
     url(r"^sitting/$", view=SittingList.as_view(), name="sitting_list"),
+    path(
+        "sitting/<int:sitting_id>/",
+        view=SittingResults.as_view(),
+        name="sitting_results",
+    ),
     path(
         "sitting/<int:sitting_id>/<int:question_order>/",
         view=SittingQuestion.as_view(),

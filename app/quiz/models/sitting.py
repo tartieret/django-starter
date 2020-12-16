@@ -46,8 +46,8 @@ class SittingManager(models.Manager):
             quiz=quiz,
             mode=mode,
             question_order=questions,
-            question_list=questions,
-            incorrect_questions="",
+            # question_list=questions,
+            # incorrect_questions="",
             current_score=0,
             complete=False,
             user_answers="{}",
@@ -95,12 +95,10 @@ class Sitting(models.Model):
     Question_list is a list of integers which represent id's of
     the unanswered questions in csv format.
 
-    Incorrect_questions is a list in the same format.
-
     Sitting deleted when quiz finished unless quiz.exam_paper is true.
 
-    User_answers is a json object in which the question PK is stored
-    with the answer the user gave.
+    User_answers is a json object in which the question order id is stored
+    with 0 or 1 based on the fact that the user was correct or not
     """
 
     MODES = ((SittingMode.STUDY, _("Study")), (SittingMode.EXAM, _("Exam")))
@@ -119,18 +117,18 @@ class Sitting(models.Model):
         validators=[validate_comma_separated_integer_list],
     )
 
-    question_list = models.CharField(
-        max_length=1024,
-        verbose_name=_("Question List"),
-        validators=[validate_comma_separated_integer_list],
-    )
+    # question_list = models.CharField(
+    #     max_length=1024,
+    #     verbose_name=_("Question List"),
+    #     validators=[validate_comma_separated_integer_list],
+    # )
 
-    incorrect_questions = models.CharField(
-        max_length=1024,
-        blank=True,
-        verbose_name=_("Incorrect questions"),
-        validators=[validate_comma_separated_integer_list],
-    )
+    # incorrect_questions = models.CharField(
+    #     max_length=1024,
+    #     blank=True,
+    #     verbose_name=_("Incorrect questions"),
+    #     validators=[validate_comma_separated_integer_list],
+    # )
 
     current_score = models.IntegerField(verbose_name=_("Current Score"))
 
@@ -151,30 +149,8 @@ class Sitting(models.Model):
     class Meta:
         permissions = (("view_sittings", _("Can see completed exams.")),)
 
-    def get_first_question(self):
-        """
-        Returns the next question.
-        If no question is found, returns False
-        Does NOT remove the question from the front of the list.
-        """
-        if not self.question_list:
-            return False
-
-        first, _ = self.question_list.split(",", 1)
-        question_id = int(first)
-        return Question.objects.get_subclass(id=question_id)
-
-    def remove_first_question(self):
-        if not self.question_list:
-            return
-
-        _, others = self.question_list.split(",", 1)
-        self.question_list = others
-        self.save()
-
     def add_to_score(self, points):
         self.current_score += int(points)
-        self.save()
 
     @property
     def get_current_score(self):
@@ -203,34 +179,33 @@ class Sitting(models.Model):
     def mark_quiz_complete(self):
         self.complete = True
         self.end = now()
-        self.save()
 
-    def add_incorrect_question(self, question):
-        """
-        Adds uid of incorrect question to the list.
-        The question object must be passed in.
-        """
-        if len(self.incorrect_questions) > 0:
-            self.incorrect_questions += ","
-        self.incorrect_questions += str(question.id) + ","
-        if self.complete:
-            self.add_to_score(-1)
-        self.save()
+    # def add_incorrect_question(self, question):
+    #     """
+    #     Adds uid of incorrect question to the list.
+    #     The question object must be passed in.
+    #     """
+    #     if len(self.incorrect_questions) > 0:
+    #         self.incorrect_questions += ","
+    #     self.incorrect_questions += str(question.id) + ","
+    #     if self.complete:
+    #         self.add_to_score(-1)
+    #     self.save()
 
-    @property
-    def get_incorrect_questions(self):
-        """
-        Returns a list of non empty integers, representing the pk of
-        questions
-        """
-        return [int(q) for q in self.incorrect_questions.split(",") if q]
+    # @property
+    # def get_incorrect_questions(self):
+    #     """
+    #     Returns a list of non empty integers, representing the pk of
+    #     questions
+    #     """
+    #     return [int(q) for q in self.incorrect_questions.split(",") if q]
 
-    def remove_incorrect_question(self, question):
-        current = self.get_incorrect_questions
-        current.remove(question.id)
-        self.incorrect_questions = ",".join(map(str, current))
-        self.add_to_score(1)
-        self.save()
+    # def remove_incorrect_question(self, question):
+    #     current = self.get_incorrect_questions
+    #     current.remove(question.id)
+    #     self.incorrect_questions = ",".join(map(str, current))
+    #     self.add_to_score(1)
+    #     self.save()
 
     @property
     def check_if_passed(self):
@@ -243,29 +218,28 @@ class Sitting(models.Model):
         else:
             return self.quiz.fail_text
 
-    def add_user_answer(self, question, guess):
+    def add_user_progress(self, question_order, is_correct):
         current = json.loads(self.user_answers)
-        current[question.id] = guess
+        current[question_order] = 1 if is_correct else 0
         self.user_answers = json.dumps(current)
-        self.save()
 
-    def get_questions(self, with_answers=False):
-        question_ids = self._question_ids()
-        questions = sorted(
-            self.quiz.question_set.filter(id__in=question_ids).select_subclasses(),
-            key=lambda q: question_ids.index(q.id),
-        )
+    # def get_questions(self, with_answers=False):
+    #     question_ids = self._question_ids()
+    #     questions = sorted(
+    #         self.quiz.question_set.filter(id__in=question_ids).select_subclasses(),
+    #         key=lambda q: question_ids.index(q.id),
+    #     )
 
-        if with_answers:
-            user_answers = json.loads(self.user_answers)
-            for question in questions:
-                question.user_answer = user_answers[str(question.id)]
+    #     if with_answers:
+    #         user_answers = json.loads(self.user_answers)
+    #         for question in questions:
+    #             question.user_answer = user_answers[str(question.id)]
 
-        return questions
+    #     return questions
 
-    @property
-    def questions_with_user_answers(self):
-        return {q: q.user_answer for q in self.get_questions(with_answers=True)}
+    # @property
+    # def questions_with_user_answers(self):
+    #     return {q: q.user_answer for q in self.get_questions(with_answers=True)}
 
     @property
     def get_max_score(self):
@@ -281,7 +255,7 @@ class Sitting(models.Model):
         return answered, total
 
     def get_nb_questions(self):
-        return UserAnswer.objects.filter(sitting=self).count()
+        return len(self._question_ids())
 
 
 class UserAnswer(models.Model):
