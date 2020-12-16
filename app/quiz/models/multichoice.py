@@ -17,6 +17,7 @@ class MCQuestion(Question):
         null=True,
         blank=True,
         choices=ANSWER_ORDER_OPTIONS,
+        default="random",
         help_text=_(
             "The order in which multichoice "
             "answer options are displayed "
