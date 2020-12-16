@@ -6,13 +6,14 @@ from app.quiz.views import (
     QuizListView,
     # QuizMarkingDetail,
     # QuizMarkingList,
-    QuizUserProgressView,
     QuizStart,
+    QuizUserProgressView,
+    SittingDelete,
     SittingList,
-    ViewQuizListByCategory,
     SittingQuestion,
     SittingQuestionExplanation,
     SittingResults,
+    ViewQuizListByCategory,
 )
 
 app_name = "quiz"
@@ -38,6 +39,11 @@ urlpatterns = [
         "sitting/<int:sitting_id>/",
         view=SittingResults.as_view(),
         name="sitting_results",
+    ),
+    path(
+        "sitting/<int:sitting_id>/delete",
+        view=SittingDelete.as_view(),
+        name="sitting_delete",
     ),
     path(
         "sitting/<int:sitting_id>/<int:question_order>/",

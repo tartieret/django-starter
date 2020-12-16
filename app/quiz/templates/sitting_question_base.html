@@ -53,7 +53,9 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-white" data-dismiss="modal">Go back</button>
-              <button type="button" class="btn btn-danger">Yes, cancel quiz</button>
+              <form action="{% url 'quiz:sitting_delete' sitting.id %}" method="POST">{% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, cancel quiz</button>
+              </form>
             </div>
           </div>
         </div>
