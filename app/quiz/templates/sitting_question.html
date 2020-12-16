@@ -34,11 +34,22 @@
 
           {% include 'correct_answer.html' %}
 
-          {% if user_answer.order < nb_questions %}
-            {% with next_question=user_answer.order|add:"1" %}
-              <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_question' sitting.id next_question %}">{% trans "Next" %}</a>
-            {% endwith %}
-          {% endif %}
+          <div class="row">
+            {% if user_answer.order > 1 %}
+            <div class="col">
+                {% with prev_question=user_answer.order|add:"-1" %}
+                  <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_question' sitting.id prev_question %}">{% trans "Previous" %}</a>
+                {% endwith %}
+            </div>
+            {% endif %}
+            {% if user_answer.order < nb_questions %}
+            <div class="col">
+                {% with next_question=user_answer.order|add:"1" %}
+                  <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_question' sitting.id next_question %}">{% trans "Next" %}</a>
+                {% endwith %}
+            </div>
+            {% endif %}
+          </div>
 
       {% else %}
 

@@ -26344,7 +26344,16 @@ a:hover .text-hover-primary {
   text-align: center;
 }
 
-.nav-question__current {
-  background-color: blue;
+.nav-question__success {
+  background-color: #00c9a7;
   color: white;
+}
+
+.nav-question__failure {
+  background-color: #ed4c78;
+  color: white;
+}
+
+.nav-question__current {
+  border: 3px solid #377dff;
 }

@@ -19,31 +19,29 @@
 
         <div class="d-flex flex-wrap">
         {% with ''|center:nb_questions as range %}
-          {% for _ in range %}
-            <a class="nav-question {% if forloop.counter == user_answer.order %} bg-primary text-white {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
+          {% for item in score_list %}
+            <a class="nav-question {% if forloop.counter == user_answer.order %} nav-question__current {% endif %}{% if item.1 == 1 %}nav-question__success {% elif item.1 == 0 %} nav-question__failure {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
           {% endfor %}
           {% endwith %}
         </div>
-
-
       </div>
 
       {% if sitting.mode == 'study' %}
-      <div class="row space-bottom-1">
-        <!-- Tabs -->
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link {% if active_tab == 'question' %}active{% endif %}" href="{% url 'quiz:sitting_question' sitting.id user_answer.order %}">Question</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if active_tab == 'explanation' %}active{% endif %}" href="{% url 'quiz:sitting_question_explanation' sitting.id user_answer.order %}">Explanation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if active_tab == 'comments' %}active{% endif %}" href="#">Comments</a>
-          </li>
-        </ul>
-        <!-- End tabs -->
-      </div>
+        <div class="row space-bottom-1">
+          <!-- Tabs -->
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link {% if active_tab == 'question' %}active{% endif %}" href="{% url 'quiz:sitting_question' sitting.id user_answer.order %}">Question</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if active_tab == 'explanation' %}active{% endif %}" href="{% url 'quiz:sitting_question_explanation' sitting.id user_answer.order %}">Explanation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if active_tab == 'comments' %}active{% endif %}" href="#">Comments</a>
+            </li>
+          </ul>
+          <!-- End tabs -->
+        </div>
       {% endif %}
 
       {% block tabcontent %}

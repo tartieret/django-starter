@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -342,13 +344,16 @@ class SittingQuestion(LoginRequiredMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         return dict(
-            kwargs, question=self.question, selected_answers=self.user_answer.answer
+            kwargs,
+            question=self.question,
+            selected_answers=str(self.user_answer.answer),
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["sitting"] = self.sitting
         context["question"] = self.question
+        context["score_list"] = self.sitting.get_score_list()
         context["user_answer"] = self.user_answer
         context["quiz"] = self.sitting.quiz
         context["question_type"]: {self.question.__class__.__name__: True}
@@ -437,4 +442,5 @@ class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):
         context["quiz"] = self.sitting.quiz
         context["active_tab"] = "explanation"
         context["nb_questions"] = self.sitting.get_nb_questions()
+        context["score_list"] = self.sitting.get_score_list()
         return context

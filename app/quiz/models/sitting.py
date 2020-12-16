@@ -41,6 +41,8 @@ class SittingManager(models.Manager):
         question_ids = [item.id for item in question_set]
         questions = ",".join(map(str, question_ids)) + ","
 
+        user_progress = {order: "?" for order in range(1, len(question_ids) + 1)}
+
         new_sitting = self.create(
             user=user,
             quiz=quiz,
@@ -50,7 +52,7 @@ class SittingManager(models.Manager):
             # incorrect_questions="",
             current_score=0,
             complete=False,
-            user_answers="{}",
+            user_answers=json.dumps(user_progress),
         )
 
         # generate default user answers
@@ -250,12 +252,20 @@ class Sitting(models.Model):
         Returns the number of questions answered so far and the total number of
         questions.
         """
-        answered = len(json.loads(self.user_answers))
+        answers = json.loads(self.user_answers)
+        answered = len([i for i, answer in answers.items() if answer != "?"])
+        print("Answered: ", answered)
         total = self.get_max_score
         return answered, total
 
     def get_nb_questions(self):
         return len(self._question_ids())
+
+    def get_score_list(self) -> list:
+        """Return a list of 0,1,? based on the fact that
+        user answers are correct or not"""
+        answers = json.loads(self.user_answers)
+        return [(i, answer) for i, answer in answers.items()]
 
 
 class UserAnswer(models.Model):
