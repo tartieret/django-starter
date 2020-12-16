@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -304,12 +304,10 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         self.user_answer = get_object_or_404(
             UserAnswer, user=request.user, sitting=sitting_id, order=question_order
         )
-
         return super().dispatch(request, *args, **kwargs)
 
     def get_form(self, *args, **kwargs):
         self.question = Question.objects.get_subclass(pk=self.user_answer.question_id)
-
         if isinstance(self.question, Essay_Question):
             form_class = EssayForm
         else:
@@ -326,13 +324,55 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         context["question"] = self.question
         context["user_answer"] = self.user_answer
         context["quiz"] = self.sitting.quiz
-        # if hasattr(self, "previous"):
-        #     context["previous"] = self.previous
-        # if hasattr(self, "progress"):
-        #     context["progress"] = self.progress
+        context["question_type"]: {self.question.__class__.__name__: True}
         context["active_tab"] = "question"
+        context["actual_answers"] = self.question.get_answers()
         context["nb_questions"] = self.sitting.get_nb_questions()
         return context
+
+    def form_valid(self, form):
+        # check the user answer
+        self.validate_answer(form)
+        if self.sitting.mode == SittingMode.STUDY:
+            # stay on the same question and show the result
+            self.request.POST = {}
+            return super().get(self, self.request)
+        else:
+            # redirect to the next question
+            url = reverse(
+                "quiz:sitting_question",
+                args=[self.sitting.id, self.user_answer.order + 1],
+            )
+            return HttpResponseRedirect(url)
+
+    def validate_answer(self, form):
+        self.user_answer.answer = form.cleaned_data["answers"]
+        is_correct = self.question.check_if_correct(self.user_answer.answer)
+
+        if is_correct is True:
+            self.sitting.add_to_score(1)
+            self.user_answer.is_correct = True
+            # progress.update_score(self.question, 1, 1)
+        else:
+            self.sitting.add_incorrect_question(self.question)
+            # progress.update_score(self.question, 0, 1)
+            self.user_answer.is_correct = False
+
+        self.user_answer.save()
+
+    def get_success_url(self):
+        if self.sitting.mode == SittingMode.STUDY:
+            # stay on the same question and show the result
+            url = reverse(
+                "quiz:sitting_question", args=[self.sitting.id, self.user_answer.order]
+            )
+        else:
+            # redirect to the next question
+            url = reverse(
+                "quiz:sitting_question",
+                args=[self.sitting.id, self.user_answer.order + 1],
+            )
+        return url
 
 
 class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):

@@ -6,18 +6,43 @@
   <div class="row">
     <div class="col">
 
-  {% if question %}
+    {% if question %}
 
-        <p>
-          <small class="muted">{% trans "Question category" %}:</small>
-          <strong>{{ question.category }}</strong>
-        </p>
+      <p>
+        <small class="muted">{% trans "Question category" %}:</small>
+        <strong>{{ question.category }}</strong>
+      </p>
 
-        <p class="lead">{{ question.content|safe }}</p>
+      <p class="lead">{{ question.content|safe }}</p>
 
-        {% if question.figure %}
-            <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
+      {% if question.figure %}
+          <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
+      {% endif %}
+
+      {% if user_answer.answer %}
+        {% if user_answer.is_correct %}
+          <div class="alert alert-soft-success">
+        {% else %}
+          <div class="alert alert-soft-danger">
         {% endif %}
+            <p>{% trans "Your answer was" %}
+              <strong>
+                {{ user_answer.is_correct|yesno:"correct,incorrect" }}
+              </strong>
+            </p>
+          </div>
+
+          {% include 'correct_answer.html' %}
+
+          {% if user_answer.order < nb_questions %}
+            {% with next_question=user_answer.order|add:"1" %}
+              <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_question' sitting.id next_question %}">{% trans "Next" %}</a>
+            {% endwith %}
+          {% else %}
+            <a class="btn btn-large btn-block btn-info" href="">{% trans "See results" %}</a>
+          {% endif %}
+
+      {% else %}
 
         <form action="" method="POST">{% csrf_token %}
           <input type=hidden name="question_id" value="{{ question.id }}">
@@ -31,10 +56,10 @@
           {% endfor %}
 
           </ul>
-          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-info" >
+          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-primary" >
         </form>
-
       {% endif %}
-    </div>
+    {% endif %}
   </div>
+</div>
 {% endblock %}
