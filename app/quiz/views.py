@@ -388,7 +388,7 @@ class SittingQuestionExplanation(LoginRequiredMixin, TemplateView):
         # retrieve the current sitting
         self.sitting = get_object_or_404(Sitting, user=self.request.user, pk=sitting_id)
         self.mode = self.sitting.mode
-        if not self.sitting.complete or self.mode == SittingMode.STUDY:
+        if self.mode == SittingMode.EXAM and not self.sitting.complete:
             raise Http404
         # retrieve the current question
         question_order = self.kwargs.get("question_order")
