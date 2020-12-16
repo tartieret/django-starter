@@ -26357,3 +26357,8 @@ a:hover .text-hover-primary {
 .nav-question__current {
   border: 3px solid #377dff;
 }
+
+.nav-question__answered {
+  background-color: #8c98a4;
+  color: white;
+}

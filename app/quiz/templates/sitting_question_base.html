@@ -18,11 +18,15 @@
       <div class="row space-bottom-1">
 
         <div class="d-flex flex-wrap">
-        {% with ''|center:nb_questions as range %}
-          {% for item in score_list %}
-            <a class="nav-question {% if forloop.counter == user_answer.order %} nav-question__current {% endif %}{% if item.1 == 1 %}nav-question__success {% elif item.1 == 0 %} nav-question__failure {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
-          {% endfor %}
-          {% endwith %}
+          {% if sitting.mode == 'study' %}
+            {% for item in score_list %}
+                <a class="nav-question {% if forloop.counter == user_answer.order %} nav-question__current {% endif %}{% if item.1 == 1 %}nav-question__success {% elif item.1 == 0 %} nav-question__failure {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
+            {% endfor %}
+          {% else %}
+            {% for item in score_list %}
+                <a class="nav-question {% if forloop.counter == user_answer.order %} nav-question__current {% endif %}{% if item.1 == 1 or item.1 == 0 %}nav-question__answered {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
+            {% endfor %}
+          {% endif %}
         </div>
       </div>
 
