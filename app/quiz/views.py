@@ -295,7 +295,7 @@ class SittingResults(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         """Restrict the list of sittings to the ones belonging to the current user"""
         queryset = super().get_queryset()
-        return queryset.filter(user=self.request.user)
+        return queryset.filter(user=self.request.user, complete=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -341,7 +341,9 @@ class SittingQuestion(LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        return dict(kwargs, question=self.question)
+        return dict(
+            kwargs, question=self.question, selected_answers=self.user_answer.answer
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -365,11 +367,17 @@ class SittingQuestion(LoginRequiredMixin, FormView):
             return super().get(self, self.request)
         else:
             # redirect to the next question
-            url = reverse(
-                "quiz:sitting_question",
-                args=[self.sitting.id, self.user_answer.order + 1],
-            )
-            return HttpResponseRedirect(url)
+            nb_questions = self.sitting.get_nb_questions()
+            if self.user_answer.order < nb_questions:
+                url = reverse(
+                    "quiz:sitting_question",
+                    args=[self.sitting.id, self.user_answer.order + 1],
+                )
+                return HttpResponseRedirect(url)
+            else:
+                # stay on the same question
+                self.request.POST = {}
+                return super().get(self, self.request)
 
     def validate_answer(self, form):
         self.user_answer.answer = form.cleaned_data["answers"]

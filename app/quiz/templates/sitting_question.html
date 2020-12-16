@@ -19,7 +19,7 @@
           <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
       {% endif %}
 
-      {% if user_answer.answer %}
+      {% if sitting.mode == 'study' and user_answer.answer %}
         {% if user_answer.is_correct %}
           <div class="alert alert-soft-success">
         {% else %}
@@ -40,10 +40,6 @@
             {% endwith %}
           {% endif %}
 
-          {% if sitting.complete %}
-            <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_results' sitting.id %}">{% trans "See results" %}</a>
-          {% endif %}
-
       {% else %}
 
         <form action="" method="POST">{% csrf_token %}
@@ -58,8 +54,20 @@
           {% endfor %}
 
           </ul>
-          <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-primary" >
+          {% if sitting.mode == 'study' %}
+            <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-info" >
+          {% else %}
+            <input type="submit" value={% trans "Save" %} class="btn btn-large btn-block btn-info" >
+          {% endif %}
         </form>
+      {% endif %}
+
+      {% if sitting.complete %}
+      <div class="row space-top-1">
+        <div class="col">
+          <a class="btn btn-large btn-block btn-primary" href="{% url 'quiz:sitting_results' sitting.id %}">{% trans "See results" %}</a>
+        </div>
+      </div>
       {% endif %}
     {% endif %}
   </div>
