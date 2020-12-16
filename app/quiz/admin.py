@@ -186,7 +186,7 @@ class UserAnswerInline(admin.TabularInline):
 
 
 class SittingAdmin(admin.ModelAdmin):
-    list_display = ("user", "quiz", "start", "end", "complete", "get_percent_correct")
+    list_display = ("user", "quiz","mode",  "start", "end", "complete", "get_percent_correct")
     inlines = [UserAnswerInline]
 
 

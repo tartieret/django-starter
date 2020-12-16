@@ -19,7 +19,7 @@
 
         <div class="col-lg-8 col-md-8 col-sm-12">
           <div class="d-flex flex-wrap">
-            {% if sitting.mode == 'study' %}
+            {% if sitting.mode == 'study' or sitting.complete %}
               {% for item in score_list %}
                   <a class="nav-question {% if forloop.counter == user_answer.order %} nav-question__current {% endif %}{% if item.1 == 1 %}nav-question__success {% elif item.1 == 0 %} nav-question__failure {% endif %}" href="{% url 'quiz:sitting_question' sitting.id forloop.counter %}">{{ forloop.counter }}</a>
               {% endfor %}
@@ -31,13 +31,17 @@
           </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 text-right">
-          <button type="button" class="btn btn-ghost-danger" data-toggle="modal" data-target="#cancelSittingConfirm">{% trans "Cancel" %}</button>
-          {% if nb_unanswered_questions == 0 %}
-            <form action="{% url 'quiz:sitting_finish' sitting.id %}" method="POST" style="display:inline">{% csrf_token %}
-              <button type="submit" class="btn btn-primary">{% trans "Finish" %}</button>
-            </form>
+          {% if sitting.complete %}
+            <a class="btn btn-primary" href="{% url 'quiz:sitting_results' sitting.id %}">{% trans "See results" %}</a>
           {% else %}
-            <button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="{% trans "Answer all the questions to finish the test" %}" disabled>{% trans "Finish" %}</button>
+            <button type="button" class="btn btn-ghost-danger" data-toggle="modal" data-target="#cancelSittingConfirm">{% trans "Cancel" %}</button>
+            {% if nb_unanswered_questions == 0 %}
+              <form action="{% url 'quiz:sitting_finish' sitting.id %}" method="POST" style="display:inline">{% csrf_token %}
+                <button type="submit" class="btn btn-primary">{% trans "Finish" %}</button>
+              </form>
+            {% else %}
+              <button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="{% trans "Answer all the questions to finish the test" %}" disabled>{% trans "Finish" %}</button>
+            {% endif %}
           {% endif %}
         </div>
       </div>

@@ -356,10 +356,10 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         else:
             self.user_answer.is_correct = False
 
-        # # in study mode, if all questions are answered mark the quiz as completed
-        # answered, total = self.sitting.progress()
-        # if self.sitting.mode == SittingMode.STUDY and answered == total:
-        #     self.sitting.mark_quiz_complete()
+        # in study mode, if all questions are answered mark the quiz as completed
+        answered, total = self.sitting.progress()
+        if self.sitting.mode == SittingMode.STUDY and answered == total:
+            self.sitting.mark_quiz_complete()
 
         self.sitting.save()
         self.user_answer.save()

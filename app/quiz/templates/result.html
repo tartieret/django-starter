@@ -48,16 +48,14 @@
     </div>
   {% endif %}
 
-  {% if sitting.mode == 'study' %}
   <div class="row">
     <div class="col">
-      <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_question' sitting.id 1 %}">{% trans "Go back to questions" %}</a>
+      <a class="btn btn-large btn-block btn-info" href="{% url 'quiz:sitting_question' sitting.id 1 %}">{% trans "Check answers" %}</a>
     </div>
     <div class="col">
       <a class="btn btn-large btn-block btn-primary" href="{% url 'quiz:quiz_category_list_all' %}">{% trans "Keep practicing" %}</a>
     </div>
   </div>
-  {% endif %}
 
   {% if possible %}
     <p class="lead">

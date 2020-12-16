@@ -19,38 +19,40 @@
           <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
       {% endif %}
 
-      {% if sitting.mode == 'study' and user_answer.answer %}
-        {% if user_answer.is_correct %}
-          <div class="alert alert-soft-success">
-        {% else %}
-          <div class="alert alert-soft-danger">
+      {% if  user_answer.answer  %}
+        {% if sitting.mode == 'study' or sitting.complete is True %}
+        
+          {% if user_answer.is_correct %}
+            <div class="alert alert-soft-success">
+          {% else %}
+            <div class="alert alert-soft-danger">
+          {% endif %}
+              <p>{% trans "Your answer was" %}
+                <strong>
+                  {{ user_answer.is_correct|yesno:"correct,incorrect" }}
+                </strong>
+              </p>
+            </div>
+
+            {% include 'correct_answer.html' %}
+
+            <div class="row">
+              {% if user_answer.order > 1 %}
+              <div class="col">
+                  {% with prev_question=user_answer.order|add:"-1" %}
+                    <a class="btn btn-large btn-block btn-outline-secondary" href="{% url 'quiz:sitting_question' sitting.id prev_question %}">{% trans "Previous" %}</a>
+                  {% endwith %}
+              </div>
+              {% endif %}
+              {% if user_answer.order < nb_questions %}
+              <div class="col">
+                  {% with next_question=user_answer.order|add:"1" %}
+                    <a class="btn btn-large btn-block btn-outline-secondary" href="{% url 'quiz:sitting_question' sitting.id next_question %}">{% trans "Next" %}</a>
+                  {% endwith %}
+              </div>
+              {% endif %}
+            </div>
         {% endif %}
-            <p>{% trans "Your answer was" %}
-              <strong>
-                {{ user_answer.is_correct|yesno:"correct,incorrect" }}
-              </strong>
-            </p>
-          </div>
-
-          {% include 'correct_answer.html' %}
-
-          <div class="row">
-            {% if user_answer.order > 1 %}
-            <div class="col">
-                {% with prev_question=user_answer.order|add:"-1" %}
-                  <a class="btn btn-large btn-block btn-outline-secondary" href="{% url 'quiz:sitting_question' sitting.id prev_question %}">{% trans "Previous" %}</a>
-                {% endwith %}
-            </div>
-            {% endif %}
-            {% if user_answer.order < nb_questions %}
-            <div class="col">
-                {% with next_question=user_answer.order|add:"1" %}
-                  <a class="btn btn-large btn-block btn-outline-secondary" href="{% url 'quiz:sitting_question' sitting.id next_question %}">{% trans "Next" %}</a>
-                {% endwith %}
-            </div>
-            {% endif %}
-          </div>
-
       {% else %}
 
         <form action="" method="POST">{% csrf_token %}
@@ -73,13 +75,6 @@
         </form>
       {% endif %}
 
-      {% if sitting.complete %}
-      <div class="row space-top-1">
-        <div class="col">
-          <a class="btn btn-large btn-block btn-primary" href="{% url 'quiz:sitting_results' sitting.id %}">{% trans "See results" %}</a>
-        </div>
-      </div>
-      {% endif %}
     {% endif %}
   </div>
 </div>
