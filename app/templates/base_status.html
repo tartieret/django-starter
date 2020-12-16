@@ -97,7 +97,7 @@ Base template for all status pages (404, 500...)
 
   <!-- IE Support -->
   <script>
-    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="../../assets/vendor/polifills.js"><\/script>');
+    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="{% static 'vendor/polyfill.js' %}"><\/script>');
   </script>
 </body>
 </html>

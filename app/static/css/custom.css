@@ -1,0 +1,46 @@
+/* These styles are generated from project.scss. */
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+/*********************************/
+/* Navigation question id         */
+/*********************************/
+
+.nav-question {
+  position: relative;
+  display: block;
+  padding: 0.25rem 0.25rem;
+  background-color: #fff;
+  border: 0.0625rem solid #e7eaf3;
+  width: 40px;
+  text-align: center;
+}
+
+.nav-question__success {
+  background-color: #00c9a7;
+  color: white;
+}
+
+.nav-question__failure {
+  background-color: #ed4c78;
+  color: white;
+}
+
+.nav-question__current {
+  border: 3px solid #377dff;
+}
+
+.nav-question__answered {
+  background-color: #8c98a4;
+  color: white;
+}
