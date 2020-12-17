@@ -83,7 +83,13 @@ if USE_S3_STORAGE:
     AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
     # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
     AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
-    aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    aws_s3_domain = (
+        AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    )
+
+    # this is require by django-ckeditor
+    # https://github.com/django-ckeditor/django-ckeditor#using-s3
+    AWS_QUERYSTRING_AUTH = False
 
 # STATIC
 # ------------------------
@@ -99,7 +105,9 @@ else:
 # ------------------------------------------------------------------------------
 
 if USE_S3_STORAGE:
-    DEFAULT_FILE_STORAGE = "{{cookiecutter.project_slug}}.utils.storages.MediaRootS3Boto3Storage"
+    DEFAULT_FILE_STORAGE = (
+        "{{cookiecutter.project_slug}}.utils.storages.MediaRootS3Boto3Storage"
+    )
     MEDIA_URL = f"https://{aws_s3_domain}/media/"
 
 # TEMPLATES
@@ -124,9 +132,7 @@ DEFAULT_FROM_EMAIL = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
-EMAIL_SUBJECT_PREFIX = env(
-    "DJANGO_EMAIL_SUBJECT_PREFIX", default="[A320 Expert]"
-)
+EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[A320 Expert]")
 
 # ADMIN
 # ------------------------------------------------------------------------------
