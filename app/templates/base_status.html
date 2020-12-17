@@ -23,7 +23,7 @@ Base template for all status pages (404, 500...)
   <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/all.min.css' %}">
 
   <!-- CSS Front Template -->
-  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  <link rel="stylesheet" href="{% static 'css/theme.min.css' %}">
 </head>
 <body class="bg-img-hero-fixed" style="background-image: url({% static 'svg/illustrations/error-404.svg' %});">
   <!-- ========== HEADER ========== -->
@@ -85,15 +85,15 @@ Base template for all status pages (404, 500...)
   </footer>
   <!-- ========== END FOOTER ========== -->
 
-  <!-- JS Global Compulsory -->
-  <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/jquery-migrate/dist/jquery-migrate.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- JS Global Compulsory -->
+    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-migrate/dist/jquery-migrate.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 
   <!-- JS Implementing Plugins -->
 
   <!-- JS Front -->
-  <script src="{% static 'js/hs.core.js' %}"></script>
+  <script src="{% static 'js/theme.min.js' %}"></script>
 
   <!-- IE Support -->
   <script>
