@@ -91,6 +91,7 @@ if USE_S3_STORAGE:
     # https://github.com/django-ckeditor/django-ckeditor#using-s3
     AWS_QUERYSTRING_AUTH = False
 
+
 # STATIC
 # ------------------------
 
@@ -98,6 +99,7 @@ if USE_S3_STORAGE:
     STATICFILES_STORAGE = "app.utils.storages.StaticRootS3Boto3Storage"
     COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
     STATIC_URL = f"https://{aws_s3_domain}/static/"
+    CKEDITOR_BASEPATH = STATIC_URL + "ckeditor/ckeditor/"
 else:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
