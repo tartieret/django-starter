@@ -6,6 +6,10 @@ from pathlib import Path
 
 import environ
 
+
+SITE_NAME = "A320 Expert"
+
+
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # app/
 APPS_DIR = ROOT_DIR / "app"
@@ -13,7 +17,7 @@ env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 # define the file that contains the environment variables, if any
-ENV_FILE = env.str('ENV_FILE', default=".env")
+ENV_FILE = env.str("ENV_FILE", default=".env")
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     path = str(ROOT_DIR / ENV_FILE)

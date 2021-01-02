@@ -8,6 +8,18 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from app.main.views import ContactView
 
+# ---------------------------------------------------------------------------
+# ADMIN site name
+# ---------------------------------------------------------------------------
+
+admin.autodiscover()
+admin.site.site_header = settings.SITE_NAME
+admin.site.site_title = settings.SITE_NAME + " Admin"
+
+# ---------------------------------------------------------------------------
+# Url configuration
+# ---------------------------------------------------------------------------
+
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
