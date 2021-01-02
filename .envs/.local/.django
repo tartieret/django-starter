@@ -5,15 +5,5 @@ IPYTHONDIR=/app/.ipython
 
 DJANGO_SECRET_KEY=aaaaaaaaaaaaa
 
-USE_S3_STORAGE=True
-DJANGO_AWS_ACCESS_KEY_ID=AKIAU5M64AXNTW2UFLOP
-DJANGO_AWS_SECRET_ACCESS_KEY=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
-DJANGO_AWS_STORAGE_BUCKET_NAME=a320expert
-DJANGO_AWS_S3_REGION_NAME=us-east-2
-
-# Redis
-# ------------------------------------------------------------------------------
-REDIS_URL=redis://a320expert_redis:6379/0
-
 
 SENDINBLUE_API_KEY=aaaa
