@@ -41,7 +41,17 @@ class MCQuestionForm(forms.Form):
 class OpenQuestionForm(forms.Form):
     def __init__(self, question, selected_answers=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        initial_value = selected_answers
         if question.answer_type == "number":
-            self.fields["answers"] = forms.FloatField(initial=selected_answers)
+            self.fields["answers"] = forms.FloatField(
+                initial=initial_value,
+                widget=forms.NumberInput(attrs={"class": "form-control"}),
+            )
         else:
-            self.fields["answers"] = forms.CharField(initial=selected_answers)
+            if selected_answers is None:
+                initial_value = ""
+            self.fields["answers"] = forms.CharField(
+                initial=initial_value,
+                max_length=50,
+                widget=forms.TextInput(attrs={"class": "form-control"}),
+            )

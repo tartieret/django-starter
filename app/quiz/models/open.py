@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -59,3 +60,11 @@ class OpenQuestion(Question):
         verbose_name = _("Open Question")
         verbose_name_plural = _("Open Questions")
         ordering = ["category"]
+
+    def clean(self):
+        try:
+            if self.answer_type == OpenAnswerType.NUMBER:
+                # check if the expected answer is a proper number
+                expected_answer = float(self.answer)
+        except:
+            raise ValidationError({"answer": _("This is not a valid number")})

@@ -302,10 +302,14 @@ class SittingQuestion(LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        if self.user_answer.answer:
+            selected_answers = str(self.user_answer.answer)
+        else:
+            selected_answers = None
         return dict(
             kwargs,
             question=self.question,
-            selected_answers=str(self.user_answer.answer),
+            selected_answers=selected_answers,
         )
 
     def get_context_data(self, **kwargs):
@@ -341,6 +345,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
                 return HttpResponseRedirect(url)
             else:
                 # stay on the same question
+                print(self.request.POST)
                 self.request.POST = {}
                 return super().get(self, self.request)
 
@@ -371,10 +376,11 @@ class SittingQuestion(LoginRequiredMixin, FormView):
                 "quiz:sitting_question", args=[self.sitting.id, self.user_answer.order]
             )
         else:
-            # redirect to the next question
+            # redirect to the next question or stay on the last one
+            nb_questions = self.sitting.get_nb_questions()
             url = reverse(
                 "quiz:sitting_question",
-                args=[self.sitting.id, self.user_answer.order + 1],
+                args=[self.sitting.id, min(self.user_answer.order + 1, nb_questions)],
             )
         return url
 

@@ -2,7 +2,7 @@
 
 
 {% if question_type == 'OpenQuestion' %}
-
+  <div class="mb-3">
   {% for answer in actual_answers %}
     {% if not user_answer.is_correct %}
       <span class="text-danger">
@@ -14,6 +14,7 @@
       </span>
     {% endif %}
   {% endfor %}
+  </div>
 
 {% else %}
 
