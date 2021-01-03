@@ -18,25 +18,36 @@
       {% if question.figure %}
           <img src="{{ question.figure.url }}" alt="{{ question.content|safe }}" />
       {% endif %}
-    
-    {% comment %} 
-      Show the question result if the user answered and we are in study mode, or if the sitting is complete 
+
+    {% comment %}
+      Show the question result if the user answered and we are in study mode, or if the sitting is complete
     {% endcomment %}
 
       {% if  user_answer.answer  %}
         {% if sitting.mode == 'study' or sitting.complete is True %}
-        
+
           {% if user_answer.is_correct %}
             <div class="alert alert-soft-success">
           {% else %}
             <div class="alert alert-soft-danger">
           {% endif %}
-              <p>{% trans "Your answer was" %}
+
+              {% if question_type == 'OpenQuestion' %}
+                <p>{% trans "Your answer was" %}
+                  <strong>
+                     {{ user_answer.answer }}
+                  </strong>
+                </p>
+              {% else %}
+                <p>{% trans "Your answer was" %}
                 <strong>
                   {{ user_answer.is_correct|yesno:"correct,incorrect" }}
                 </strong>
               </p>
+              {% endif %}
             </div>
+
+
 
             {% include 'correct_answer.html' %}
 
@@ -59,8 +70,8 @@
         {% endif %}
       {% endif %}
 
-      {% comment %} 
-        Show the question form if the user has not answered yet, or if we are in exam mode and the sitting is not complete 
+      {% comment %}
+        Show the question form if the user has not answered yet, or if we are in exam mode and the sitting is not complete
       {% endcomment %}
       {% if not user_answer.answer or sitting.mode == 'exam' %}
         {% if sitting.complete is False %}
@@ -68,15 +79,22 @@
           <form action="" method="POST">{% csrf_token %}
             <input type=hidden name="question_id" value="{{ question.id }}">
 
-            <ul class="list-group mb-4">
+            {% if question_type == "OpenQuestion" %}
+              {% for answer in form.answers %}
+              <div class="form-group">
+                  {{ answer }}
+              </div>
+              {% endfor %}
+            {% else %}
+              <ul class="list-group mb-4">
+                {% for answer in form.answers %}
+                  <li class="list-group-item">
+                    {{ answer }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
 
-            {% for answer in form.answers %}
-              <li class="list-group-item">
-                {{ answer }}
-              </li>
-            {% endfor %}
-
-            </ul>
             {% if sitting.mode == 'study' %}
               <input type="submit" value={% trans "Check" %} class="btn btn-large btn-block btn-outline-info" >
             {% else %}

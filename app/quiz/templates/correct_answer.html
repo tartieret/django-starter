@@ -1,30 +1,49 @@
 {% load i18n %}
 
-<table class="table table-striped table-bordered">
-  <tbody>
-    {% for answer in actual_answers %}
-      {% if answer.correct %}
-      <tr class="success">
-      <td>{{ answer.content }}</td>
-      <td>
-      <span class="{% if user_was_incorrect %}text-danger{% else %}text-success{% endif %}">
-          <strong>{% trans "This is the correct answer" %}</strong>
-        </span>
-      </td>
-      {% else %}
-    <tr>
-        <td>{{ answer.content }}</td>
-      <td>
-      {% if question_type.MCQuestion %}
-        {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
+
+{% if question_type == 'OpenQuestion' %}
+
+  {% for answer in actual_answers %}
+    {% if not user_answer.is_correct %}
       <span class="text-danger">
-          <strong>{% trans "This was your answer." %}</strong>
-        </span>
-        {% endif %}
-      {% endif %}
-      </td>
+        <strong>{% trans "The correct answer is: " %}{{ answer.content }}</strong>
+      </span>
+    {% else %}
+      <span class="text-success">
+        <strong>{% trans "This was the correct answer" %}</strong>
+      </span>
     {% endif %}
-      </tr>
   {% endfor %}
-  </tbody>
-</table>
+
+{% else %}
+
+  <table class="table table-striped table-bordered">
+    <tbody>
+      {% for answer in actual_answers %}
+        {% if answer.correct %}
+        <tr class="success">
+        <td>{{ answer.content }}</td>
+        <td>
+        <span class="{% if user_was_incorrect %}text-danger{% else %}text-success{% endif %}">
+            <strong>{% trans "This is the correct answer" %}</strong>
+          </span>
+        </td>
+        {% else %}
+      <tr>
+          <td>{{ answer.content }}</td>
+        <td>
+        {% if question_type == 'MCQuestion' %}
+          {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
+        <span class="text-danger">
+            <strong>{% trans "This was your answer." %}</strong>
+          </span>
+          {% endif %}
+        {% endif %}
+        </td>
+      {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endif %}

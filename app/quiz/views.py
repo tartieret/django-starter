@@ -315,7 +315,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         context["score_list"] = self.sitting.get_score_list()
         context["user_answer"] = self.user_answer
         context["quiz"] = self.sitting.quiz
-        context["question_type"]: {self.question.__class__.__name__: True}
+        context["question_type"] = self.question.__class__.__name__
         context["active_tab"] = "question"
         context["actual_answers"] = self.question.get_answers()
         context["nb_questions"] = self.sitting.get_nb_questions()
