@@ -12,6 +12,7 @@ from .models import (
     Question,
     Quiz,
     MCQuestion,
+    OpenQuestion,
     Progress,
     Sitting,
     SubCategory,
@@ -116,6 +117,11 @@ class MCQuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
 
 
+class OpenQuestionAdmin(admin.ModelAdmin):
+    list_display = ("content", "category", "sub_category")
+    list_filter = ("category",)
+
+
 class ProgressAdmin(admin.ModelAdmin):
     """
     to do:
@@ -186,7 +192,15 @@ class UserAnswerInline(admin.TabularInline):
 
 
 class SittingAdmin(admin.ModelAdmin):
-    list_display = ("user", "quiz","mode",  "start", "end", "complete", "get_percent_correct")
+    list_display = (
+        "user",
+        "quiz",
+        "mode",
+        "start",
+        "end",
+        "complete",
+        "get_percent_correct",
+    )
     inlines = [UserAnswerInline]
 
 
@@ -195,6 +209,7 @@ admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(MCQuestion, MCQuestionAdmin)
+admin.site.register(OpenQuestion, OpenQuestionAdmin)
 admin.site.register(Progress, ProgressAdmin)
 admin.site.register(TF_Question, TFQuestionAdmin)
 admin.site.register(Essay_Question, EssayQuestionAdmin)
