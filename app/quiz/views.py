@@ -14,14 +14,15 @@ from django.views.generic import (
     ListView,
     RedirectView,
     TemplateView,
-    View
+    View,
 )
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import MCQuestionForm, EssayForm
+from .forms import EssayForm, MCQuestionForm, OpenQuestionForm
 from .models import (
     Category,
     Essay_Question,
+    OpenQuestion,
     Progress,
     Question,
     Quiz,
@@ -192,6 +193,7 @@ class SittingList(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user)
 
+
 class SittingFinish(LoginRequiredMixin, SingleObjectMixin, View):
 
     pk_url_kwarg = "sitting_id"
@@ -206,29 +208,27 @@ class SittingFinish(LoginRequiredMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         """On POST, mark the sitting as complete"""
         sitting = self.get_object()
-        print("Selected object: ", sitting)
         unanswered_questions = sitting.get_unanswered_questions()
         if len(unanswered_questions) > 0:
             # invalid, go back to unanswered questions
             url = reverse(
-                    "quiz:sitting_question",
-                    args=[sitting.id, unanswered_questions[0]],
-                )
+                "quiz:sitting_question",
+                args=[sitting.id, unanswered_questions[0]],
+            )
             return HttpResponseRedirect(url)
         else:
             sitting.mark_quiz_complete()
             sitting.save()
-            print("Mark sitting as completed")
             url = reverse(
-                    "quiz:sitting_results",
-                    args=[sitting.id],
-                )
+                "quiz:sitting_results",
+                args=[sitting.id],
+            )
             return HttpResponseRedirect(url)
-
 
 
 class SittingResults(LoginRequiredMixin, DetailView):
     """Show the results for a given sitting"""
+
     template_name = "result.html"
     pk_url_kwarg = "sitting_id"
     model = Sitting
@@ -236,19 +236,17 @@ class SittingResults(LoginRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         """On POST, mark the sitting as complete"""
         self.object = self.get_object()
-        print("Selected object: ", self.object)
         unanswered_questions = self.object.get_unanswered_questions()
         if len(unanswered_questions) > 0:
             # invalid, go back to unanswered questions
             url = reverse(
-                    "quiz:sitting_question",
-                    args=[self.object.id, unanswered_questions[0]],
-                )
+                "quiz:sitting_question",
+                args=[self.object.id, unanswered_questions[0]],
+            )
             return HttpResponseRedirect(url)
         else:
             self.object.mark_quiz_complete()
             self.object.save()
-            print("Mark sitting as completed")
             request.POST = {}
             return super().get(self, request)
 
@@ -296,6 +294,8 @@ class SittingQuestion(LoginRequiredMixin, FormView):
         self.question = Question.objects.get_subclass(pk=self.user_answer.question_id)
         if isinstance(self.question, Essay_Question):
             form_class = EssayForm
+        elif isinstance(self.question, OpenQuestion):
+            form_class = OpenQuestionForm
         else:
             form_class = MCQuestionForm
         return form_class(**self.get_form_kwargs())

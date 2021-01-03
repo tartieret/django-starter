@@ -4,6 +4,14 @@ from django import forms
 from django.forms.widgets import RadioSelect, Textarea, CheckboxSelectMultiple
 
 
+class EssayForm(forms.Form):
+    def __init__(self, question, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["answers"] = forms.CharField(
+            widget=Textarea(attrs={"style": "width:100%"})
+        )
+
+
 class MCQuestionForm(forms.Form):
     def __init__(self, question, selected_answers=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -30,9 +38,10 @@ class MCQuestionForm(forms.Form):
             )
 
 
-class EssayForm(forms.Form):
-    def __init__(self, question, *args, **kwargs):
-        super(EssayForm, self).__init__(*args, **kwargs)
-        self.fields["answers"] = forms.CharField(
-            widget=Textarea(attrs={"style": "width:100%"})
-        )
+class OpenQuestionForm(forms.Form):
+    def __init__(self, question, selected_answers=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if question.answer_type == "number":
+            self.fields["answers"] = forms.FloatField(initial=selected_answers)
+        else:
+            self.fields["answers"] = forms.CharField(initial=selected_answers)
