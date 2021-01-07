@@ -12,8 +12,7 @@
           <div class="col-lg-5">
             <div class="mb-5 mt-2">
               <h1 class="display-4 mb-3">
-                Ready to fly ?
-
+                Are you ready to
                 <span class="text-primary text-highlight-warning">
                   <span class="js-text-animation"></span>
                 </span>
@@ -364,5 +363,23 @@
       <!-- End Pricing Section -->
     </div>
     </div>
+
+{% endblock %}
+
+
+{% block javascript %}
+<script src="{% static 'vendor/typed.js/lib/typed.min.js' %}"></script>
+<script>
+  $(document).on("ready", function () {
+    // initialization of text animation (typing)
+    var typed = new Typed(".js-text-animation", {
+      strings: ["fly?", "get hired?", "learn?"],
+      typeSpeed: 90,
+      loop: true,
+      backSpeed: 30,
+      backDelay: 2500
+    });
+  });
+</script>
 
 {% endblock %}
