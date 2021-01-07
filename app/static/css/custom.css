@@ -13,6 +13,19 @@
 }
 
 /*********************************/
+/* Top page logo               */
+/*********************************/
+
+.navbar-brand,
+.navbar-brand>img {
+  width: 14rem;
+}
+
+.navbar-expand-lg .navbar-brand>img {
+  width: 14rem;
+}
+
+/*********************************/
 /* Navigation question id         */
 /*********************************/
 
