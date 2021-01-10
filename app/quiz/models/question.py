@@ -60,3 +60,6 @@ class Question(models.Model):
 
     def __str__(self):
         return self.content
+
+    def type(self):
+        return self.__class__.__name__
