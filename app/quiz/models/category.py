@@ -14,18 +14,20 @@ class CategoryManager(models.Manager):
 
 class Category(models.Model):
 
-    category = models.CharField(
+    name = models.CharField(
         verbose_name=_("Category"), max_length=250, blank=True, unique=True, null=True
     )
 
-    description = models.CharField(verbose_name=_("Description"), max_length=150, blank=True, default="")
+    description = models.CharField(
+        verbose_name=_("Description"), max_length=150, blank=True, default=""
+    )
 
     objects = CategoryManager()
 
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
-        ordering = ["category"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.category
@@ -33,7 +35,7 @@ class Category(models.Model):
 
 class SubCategory(models.Model):
 
-    sub_category = models.CharField(
+    name = models.CharField(
         verbose_name=_("Sub-Category"), max_length=250, blank=True, null=True
     )
 
@@ -50,7 +52,7 @@ class SubCategory(models.Model):
     class Meta:
         verbose_name = _("Sub-Category")
         verbose_name_plural = _("Sub-Categories")
-        ordering = ["sub_category"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.sub_category + " (" + self.category.category + ")"
