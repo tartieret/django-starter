@@ -26,7 +26,7 @@ class MCQuestionSerializer(serializers.ModelSerializer):
 
     category = serializers.CharField(source="category.name")
 
-    sub_category = serializers.CharField(source="sub_category.name")
+    sub_category = serializers.CharField(source="sub_category.name", default=None)
 
     answers = AnswerSerializer(source="answer_set", many=True)
 
@@ -41,7 +41,9 @@ class OpenQuestionSerializer(serializers.ModelSerializer):
 
     category = serializers.CharField(source="category.name")
 
-    sub_category = serializers.CharField(source="sub_category.name")
+    sub_category = serializers.CharField(
+        source="sub_category.name", default=None, allow_null=True, required=False
+    )
 
     type = serializers.ReadOnlyField()
 
@@ -54,7 +56,9 @@ class TFQuestionSerializer(serializers.ModelSerializer):
 
     category = serializers.CharField(source="category.name")
 
-    sub_category = serializers.CharField(source="sub_category.name")
+    sub_category = serializers.CharField(
+        source="sub_category.name", default=None, allow_null=True, required=False
+    )
 
     type = serializers.ReadOnlyField()
 
@@ -67,7 +71,9 @@ class QuestionListSerializer(serializers.ListSerializer):
 
     category = serializers.CharField(source="category.name")
 
-    sub_category = serializers.CharField(source="sub_category.name")
+    sub_category = serializers.CharField(
+        source="sub_category.name", default=None, allow_null=True, required=False
+    )
 
     type = serializers.ReadOnlyField()
 
@@ -92,7 +98,9 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     category = serializers.CharField(source="category.name")
 
-    sub_category = serializers.CharField(source="sub_category.name")
+    sub_category = serializers.CharField(
+        source="sub_category.name", default=None, allow_null=True, required=False
+    )
 
     type = serializers.ReadOnlyField()
 
