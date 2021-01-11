@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CategoryManager(models.Manager):
-    def new_category(self, category):
-        new_category = self.create(category=re.sub(r"\s+", "-", category).lower())
+    def new_category(self, name):
+        new_category = self.create(name=re.sub(r"\s+", "-", category).lower())
 
         new_category.save()
         return new_category
@@ -15,7 +15,7 @@ class CategoryManager(models.Manager):
 class Category(models.Model):
 
     name = models.CharField(
-        verbose_name=_("Category"), max_length=250, blank=True, unique=True, null=True
+        verbose_name=_("Name"), max_length=250, blank=True, unique=True, null=True
     )
 
     description = models.CharField(
@@ -30,13 +30,13 @@ class Category(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return self.category
+        return self.name
 
 
 class SubCategory(models.Model):
 
     name = models.CharField(
-        verbose_name=_("Sub-Category"), max_length=250, blank=True, null=True
+        verbose_name=_("Name"), max_length=250, blank=True, null=True
     )
 
     category = models.ForeignKey(
@@ -55,4 +55,4 @@ class SubCategory(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return self.sub_category + " (" + self.category.category + ")"
+        return self.name + " (" + self.category.name + ")"

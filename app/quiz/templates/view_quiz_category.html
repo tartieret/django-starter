@@ -1,8 +1,8 @@
 {% extends 'app.html' %}
 {% load i18n %}
-{% block title %}{% trans "Tests related to" %} {{ category.category }}{% endblock %}
+{% block title %}{% trans "Tests related to" %} {{ category.name }}{% endblock %}
 
-{% block page_title %}{% trans "Test your knowledge about" %} <span class="text-primary"><strong>{{ category.category }} </strong></span>{% endblock %}
+{% block page_title %}{% trans "Test your knowledge about" %} <span class="text-primary"><strong>{{ category.name }} </strong></span>{% endblock %}
 
 {% block inner %}
 

@@ -16,17 +16,17 @@
         <div class="card shadow-sm max-w-27rem transition-3d-hover mx-auto mb-5 card-hover-shadow transition-3d-hover">
           <div class="card-body">
             <div class="mb-3">
-              <h2 class="h4 mb-1">{{ cat.category }}</h2>
+              <h2 class="h4 mb-1">{{ cat.name }}</h2>
               <small class="d-block text-body">{{ cat.description }}</small>
             </div>
-            <a class="btn btn-sm btn-block btn-primary stretched-link" href="{% url 'quiz:quiz_category_list_matching' category_name=cat.category %}">{% trans "Practice" %}</a>
+            <a class="btn btn-sm btn-block btn-primary stretched-link" href="{% url 'quiz:quiz_category_list_matching' category_name=cat.name %}">{% trans "Practice" %}</a>
           </div>
         </div>
         {% endfor %}
       </div>
     </div>
     <!-- End List -->
-    
+
     <!-- Link to all quizzes -->
     <div class="text-center mb-2 mt-5">
       <h4>

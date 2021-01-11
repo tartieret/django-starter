@@ -59,7 +59,7 @@ class Progress(models.Model):
         output = {}
 
         for cat in Category.objects.all():
-            to_find = re.escape(cat.category) + r",(\d+),(\d+),"
+            to_find = re.escape(cat.name) + r",(\d+),(\d+),"
             #  group 1 is score, group 2 is highest possible
 
             match = re.search(to_find, self.score, re.IGNORECASE)
@@ -73,11 +73,11 @@ class Progress(models.Model):
                 except:
                     percent = 0
 
-                output[cat.category] = [score, possible, percent]
+                output[cat.name] = [score, possible, percent]
 
             else:  # if category has not been added yet, add it.
-                self.score += cat.category + ",0,0,"
-                output[cat.category] = [0, 0]
+                self.score += cat.name + ",0,0,"
+                output[cat.name] = [0, 0]
 
         if len(self.score) > len(score_before):
             # If a new category has been added, save changes.

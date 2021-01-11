@@ -31,9 +31,9 @@ User = get_user_model()
 
 class TestCategory(TestCase):
     def setUp(self):
-        self.c1 = Category.objects.new_category(category="squishy   berries")
+        self.c1 = Category.objects.new_category(name="squishy   berries")
 
-        self.sub1 = SubCategory.objects.create(sub_category="Red", category=self.c1)
+        self.sub1 = SubCategory.objects.create(name="Red", category=self.c1)
 
     def test_categories(self):
         self.assertEqual(self.c1.category, "squishy-berries")
@@ -44,7 +44,7 @@ class TestCategory(TestCase):
 
 class TestQuiz(TestCase):
     def setUp(self):
-        self.c1 = Category.objects.new_category(category="elderberries")
+        self.c1 = Category.objects.new_category(name="elderberries")
 
         self.quiz1 = Quiz.objects.create(
             id=1, title="test quiz 1", description="d1", url="tq1"
@@ -78,7 +78,7 @@ class TestQuiz(TestCase):
             exam_paper=True,
         )
 
-        self.assertEqual(q5.category.category, self.c1.category)
+        self.assertEqual(q5.category.name, self.c1.name)
         self.assertEqual(q5.random_order, False)
         self.assertEqual(q5.exam_paper, True)
 
@@ -105,7 +105,7 @@ class TestQuiz(TestCase):
 
 class TestProgress(TestCase):
     def setUp(self):
-        self.c1 = Category.objects.new_category(category="elderberries")
+        self.c1 = Category.objects.new_category(name="elderberries")
 
         self.quiz1 = Quiz.objects.create(
             id=1, title="test quiz 1", description="d1", url="tq1"
@@ -128,7 +128,7 @@ class TestProgress(TestCase):
 
         self.assertIn(self.c1.category, self.p1.score)
 
-        Category.objects.new_category(category="cheese")
+        Category.objects.new_category(name="cheese")
 
         self.p1.list_all_cat_scores
 
@@ -145,7 +145,7 @@ class TestProgress(TestCase):
         self.p1.update_score(self.question1, 1, 2)
         self.assertIn("elderberries", self.p1.list_all_cat_scores)
 
-        cheese = Category.objects.new_category(category="cheese")
+        cheese = Category.objects.new_category(name="cheese")
         question2 = MCQuestion.objects.create(content="squeek", category=cheese)
         self.p1.update_score(question2, 3, 4)
 
@@ -302,9 +302,9 @@ class TestNonQuestionViews(TestCase):
     urls = "quiz.urls"
 
     def setUp(self):
-        self.c1 = Category.objects.new_category(category="elderberries")
-        self.c2 = Category.objects.new_category(category="straw.berries")
-        self.c3 = Category.objects.new_category(category="black berries")
+        self.c1 = Category.objects.new_category(name="elderberries")
+        self.c2 = Category.objects.new_category(name="straw.berries")
+        self.c3 = Category.objects.new_category(name="black berries")
 
         self.quiz1 = Quiz.objects.create(
             id=1,
@@ -392,7 +392,7 @@ class TestQuestionMarking(TestCase):
     urls = "quiz.urls"
 
     def setUp(self):
-        self.c1 = Category.objects.new_category(category="elderberries")
+        self.c1 = Category.objects.new_category(name="elderberries")
         self.student = User.objects.create_user(
             email="luke@rebels.com", password="top_secret"
         )
@@ -527,7 +527,7 @@ class TestQuestionViewsUser(TestCase):
     urls = "quiz.urls"
 
     def setUp(self):
-        self.c1 = Category.objects.new_category(category="elderberries")
+        self.c1 = Category.objects.new_category(name="elderberries")
 
         self.quiz1 = Quiz.objects.create(
             id=1,

@@ -80,20 +80,17 @@ class ViewQuizListByCategory(LoginRequiredMixin, ListView):
     template_name = "view_quiz_category.html"
 
     def dispatch(self, request, *args, **kwargs):
-        self.category = get_object_or_404(
-            Category, category=self.kwargs["category_name"]
-        )
-
-        return super(ViewQuizListByCategory, self).dispatch(request, *args, **kwargs)
+        self.category = get_object_or_404(Category, name=self.kwargs["category_name"])
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(ViewQuizListByCategory, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         context["category"] = self.category
         return context
 
     def get_queryset(self):
-        queryset = super(ViewQuizListByCategory, self).get_queryset()
+        queryset = super().get_queryset()
         return queryset.filter(category=self.category, draft=False)
 
 
