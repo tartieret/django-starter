@@ -21,7 +21,7 @@ from django.views.generic.detail import SingleObjectMixin
 from .forms import EssayForm, MCQuestionForm, OpenQuestionForm
 from .models import (
     Category,
-    Essay_Question,
+    EssayQuestion,
     OpenQuestion,
     Progress,
     Question,
@@ -289,7 +289,7 @@ class SittingQuestion(LoginRequiredMixin, FormView):
 
     def get_form(self, *args, **kwargs):
         self.question = Question.objects.get_subclass(pk=self.user_answer.question_id)
-        if isinstance(self.question, Essay_Question):
+        if isinstance(self.question, EssayQuestion):
             form_class = EssayForm
         elif isinstance(self.question, OpenQuestion):
             form_class = OpenQuestionForm

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .question import Question
 
 
-class TF_Question(Question):
+class TFQuestion(Question):
     correct = models.BooleanField(
         blank=False,
         default=False,

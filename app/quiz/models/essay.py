@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from .question import Question
 
 
-class Essay_Question(Question):
+class EssayQuestion(Question):
     def check_if_correct(self, guess):
         return False
 

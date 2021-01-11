@@ -8,7 +8,7 @@ from ckeditor.widgets import CKEditorWidget
 from .models import (
     Answer,
     Category,
-    Essay_Question,
+    EssayQuestion,
     Question,
     Quiz,
     MCQuestion,
@@ -16,7 +16,7 @@ from .models import (
     Progress,
     Sitting,
     SubCategory,
-    TF_Question,
+    TFQuestion,
     UserAnswer,
 )
 
@@ -140,7 +140,7 @@ class TFQuestionAdminForm(forms.ModelForm):
     explanation = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
-        model = TF_Question
+        model = TFQuestion
         fields = "__all__"
 
 
@@ -168,7 +168,7 @@ class EssayQuestionAdminForm(forms.ModelForm):
     explanation = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
-        model = TF_Question
+        model = TFQuestion
         fields = "__all__"
 
 
@@ -211,5 +211,5 @@ admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(MCQuestion, MCQuestionAdmin)
 admin.site.register(OpenQuestion, OpenQuestionAdmin)
 admin.site.register(Progress, ProgressAdmin)
-admin.site.register(TF_Question, TFQuestionAdmin)
-admin.site.register(Essay_Question, EssayQuestionAdmin)
+admin.site.register(TFQuestion, TFQuestionAdmin)
+admin.site.register(EssayQuestion, EssayQuestionAdmin)

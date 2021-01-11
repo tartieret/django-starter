@@ -7,7 +7,7 @@ from app.quiz.models import (
     OpenQuestion,
     Question,
     Quiz,
-    TF_Question,
+    TFQuestion,
 )
 
 
@@ -50,7 +50,7 @@ class OpenQuestionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TF_QuestionSerializer(serializers.ModelSerializer):
+class TFQuestionSerializer(serializers.ModelSerializer):
 
     category = serializers.CharField(source="category.name")
 
@@ -59,7 +59,7 @@ class TF_QuestionSerializer(serializers.ModelSerializer):
     type = serializers.ReadOnlyField()
 
     class Meta:
-        model = TF_Question
+        model = TFQuestion
         fields = "__all__"
 
 
@@ -106,8 +106,8 @@ class QuestionSerializer(serializers.ModelSerializer):
             return MCQuestionSerializer(instance=instance).data
         elif isinstance(instance, OpenQuestion):
             return OpenQuestionSerializer(instance=instance).data
-        elif isinstance(instance, TF_Question):
-            return TF_QuestionSerializer(instance=instance).data
+        elif isinstance(instance, TFQuestion):
+            return TFQuestionSerializer(instance=instance).data
         else:
             return super().to_representation(instance)
 

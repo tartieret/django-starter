@@ -15,13 +15,13 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     Answer,
     Category,
-    Essay_Question,
+    EssayQuestion,
     MCQuestion,
     Progress,
     Quiz,
     Sitting,
     SubCategory,
-    TF_Question,
+    TFQuestion,
 )
 from .views import QuizListView, CategoriesListView, QuizDetailView
 
@@ -248,7 +248,7 @@ class TestSitting(TestCase):
         self.sitting.add_incorrect_question(self.question1)
         self.assertIn(1, self.sitting.get_incorrect_questions)
 
-        question3 = TF_Question.objects.create(id=3, content="oink")
+        question3 = TFQuestion.objects.create(id=3, content="oink")
         self.sitting.add_incorrect_question(question3)
         self.assertIn(3, self.sitting.get_incorrect_questions)
 
@@ -501,7 +501,7 @@ class TestQuestionMarking(TestCase):
         self.assertContains(response, "incorrect")
 
     def test_paper_marking_detail_toggle_correct(self):
-        question2 = Essay_Question.objects.create(id=3, content="scribble")
+        question2 = EssayQuestion.objects.create(id=3, content="scribble")
         question2.quiz.add(self.quiz1)
 
         sitting3 = Sitting.objects.new_sitting(self.student, self.quiz1)
@@ -563,7 +563,7 @@ class TestQuestionViewsUser(TestCase):
         self.question2 = MCQuestion.objects.create(id=2, content="squeek")
         self.question2.quiz.add(self.quiz1)
 
-        self.question3 = TF_Question.objects.create(id=3, content="oink", correct=True)
+        self.question3 = TFQuestion.objects.create(id=3, content="oink", correct=True)
         self.question3.quiz.add(self.quiz2)
 
         self.answer1 = Answer.objects.create(
@@ -696,7 +696,7 @@ class TestQuestionViewsUser(TestCase):
         response_with_perm = self.client.get("/draft/")
         self.assertEqual(response_with_perm.status_code, 200)
 
-    def test_essay_question(self):
+    def test_EssayQuestion(self):
         quiz3 = Quiz.objects.create(
             id=3,
             title="test quiz 3",
@@ -705,7 +705,7 @@ class TestQuestionViewsUser(TestCase):
             category=self.c1,
             exam_paper=True,
         )
-        essay = Essay_Question.objects.create(id=4, content="tell all")
+        essay = EssayQuestion.objects.create(id=4, content="tell all")
         essay.quiz.add(quiz3)
         self.client.login(email="jacob@jacob.com", password="top_secret")
 
@@ -739,7 +739,7 @@ class TestTemplateTags(TestCase):
             id=456, question=self.question1, content="bong", correct=True
         )
 
-        self.question2 = TF_Question.objects.create(id=3, content="oink", correct=True)
+        self.question2 = TFQuestion.objects.create(id=3, content="oink", correct=True)
         self.quiz1 = Quiz.objects.create(
             id=1, title="test quiz 1", description="d1", url="tq1"
         )
