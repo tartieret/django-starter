@@ -72,6 +72,31 @@ class QuizAdmin(admin.ModelAdmin):
         "category",
     )
 
+    fieldsets = (
+        (
+            "Publish",
+            {
+                "fields": (
+                    "category",
+                    "draft",
+                    "url",
+                ),
+            },
+        ),
+        (
+            "Quiz",
+            {
+                "fields": (
+                    "title",
+                    "description",
+                    "random_order",
+                    "max_questions",
+                    "single_attempt",
+                )
+            },
+        ),
+    )
+
 
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("name",)
