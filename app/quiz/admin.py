@@ -97,13 +97,15 @@ class MCQuestionAdminForm(forms.ModelForm):
 
 
 class MCQuestionAdmin(admin.ModelAdmin):
-    list_display = ("content", "category", "sub_category")
+    list_display = (
+        "content",
+        "category",
+    )
     list_filter = ("category",)
     form = MCQuestionAdminForm
     fields = (
         "content",
         "category",
-        "sub_category",
         "figure",
         "explanation",
         "quiz",
@@ -118,7 +120,10 @@ class MCQuestionAdmin(admin.ModelAdmin):
 
 
 class OpenQuestionAdmin(admin.ModelAdmin):
-    list_display = ("content", "category", "sub_category")
+    list_display = (
+        "content",
+        "category",
+    )
     list_filter = ("category",)
 
 
@@ -146,12 +151,14 @@ class TFQuestionAdminForm(forms.ModelForm):
 
 class TFQuestionAdmin(admin.ModelAdmin):
     form = TFQuestionAdminForm
-    list_display = ("content", "category", "sub_category")
+    list_display = (
+        "content",
+        "category",
+    )
     list_filter = ("category",)
     fields = (
         "content",
         "category",
-        "sub_category",
         "figure",
         "correct",
         "explanation",
@@ -174,12 +181,14 @@ class EssayQuestionAdminForm(forms.ModelForm):
 
 class EssayQuestionAdmin(admin.ModelAdmin):
     form = EssayQuestionAdminForm
-    list_display = ("content", "category", "sub_category")
+    list_display = (
+        "content",
+        "category",
+    )
     list_filter = ("category",)
     fields = (
         "content",
         "category",
-        "sub_category",
         "explanation",
         "quiz",
     )

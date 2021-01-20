@@ -23,14 +23,6 @@ class Question(models.Model):
         on_delete=models.CASCADE,
     )
 
-    sub_category = models.ForeignKey(
-        SubCategory,
-        verbose_name=_("Sub-Category"),
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE,
-    )
-
     figure = models.ImageField(
         upload_to="uploads/%Y/%m/%d", blank=True, null=True, verbose_name=_("Figure")
     )

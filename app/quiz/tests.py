@@ -135,7 +135,7 @@ class TestProgress(TestCase):
         self.assertIn("cheese", self.p1.score)
 
     def test_subcategory_all_empty(self):
-        SubCategory.objects.create(sub_category="pickles", category=self.c1)
+        SubCategory.objects.create(category=self.c1)
         # self.p1.list_all_cat_scores
         # self.assertIn('pickles', self.p1.score)
         # TODO: test after implementing subcategory scoring on progress page
