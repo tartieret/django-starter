@@ -19,10 +19,6 @@ class Question(models.Model):
         Category, verbose_name=_("Category"), blank=True, related_name="questions"
     )
 
-    figure = models.ImageField(
-        upload_to="questions", blank=True, null=True, verbose_name=_("Figure")
-    )
-
     content = models.TextField(
         max_length=1000,
         blank=False,

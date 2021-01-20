@@ -47,6 +47,8 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # Captcha urls
     path("captcha/", include("captcha.urls")),
+    # ckeditor upload urls
+    path("ckeditor/", include("ckeditor_uploader.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext_lazy as _
 
-from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from .models import (
     Answer,
@@ -103,9 +103,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class MCQuestionAdminForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorWidget())
+    content = forms.CharField(widget=CKEditorUploadingWidget())
 
-    explanation = forms.CharField(widget=CKEditorWidget())
+    explanation = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = MCQuestion
@@ -136,7 +136,6 @@ class MCQuestionAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "content",
-                    "figure",
                     "explanation",
                     "allow_multiple_answers",
                     "answer_order",
@@ -174,7 +173,6 @@ class OpenQuestionAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "content",
-                    "figure",
                     "explanation",
                 )
             },
@@ -204,9 +202,9 @@ class ProgressAdmin(admin.ModelAdmin):
 
 
 class TFQuestionAdminForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorWidget())
+    content = forms.CharField(widget=CKEditorUploadingWidget())
 
-    explanation = forms.CharField(widget=CKEditorWidget())
+    explanation = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = TFQuestion
@@ -236,7 +234,6 @@ class TFQuestionAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "content",
-                    "figure",
                     "correct",
                     "explanation",
                 )
@@ -249,9 +246,9 @@ class TFQuestionAdmin(admin.ModelAdmin):
 
 
 class EssayQuestionAdminForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorWidget())
+    content = forms.CharField(widget=CKEditorUploadingWidget())
 
-    explanation = forms.CharField(widget=CKEditorWidget())
+    explanation = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = TFQuestion
