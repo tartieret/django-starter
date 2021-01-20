@@ -15,16 +15,12 @@ class Question(models.Model):
 
     quiz = models.ManyToManyField(Quiz, verbose_name=_("Quiz"), blank=True)
 
-    category = models.ForeignKey(
-        Category,
-        verbose_name=_("Category"),
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE,
+    category = models.ManyToManyField(
+        Category, verbose_name=_("Category"), blank=True, related_name="questions"
     )
 
     figure = models.ImageField(
-        upload_to="uploads/%Y/%m/%d", blank=True, null=True, verbose_name=_("Figure")
+        upload_to="questions", blank=True, null=True, verbose_name=_("Figure")
     )
 
     content = models.TextField(
@@ -48,7 +44,7 @@ class Question(models.Model):
     class Meta:
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
-        ordering = ["category"]
+        ordering = ["content"]
 
     def __str__(self):
         return self.content

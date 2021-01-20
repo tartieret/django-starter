@@ -88,10 +88,7 @@ class MCQuestionAdminForm(forms.ModelForm):
 
 
 class MCQuestionAdmin(admin.ModelAdmin):
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content",)
     list_filter = ("category",)
     form = MCQuestionAdminForm
 
@@ -130,10 +127,7 @@ class MCQuestionAdmin(admin.ModelAdmin):
 
 
 class OpenQuestionAdmin(admin.ModelAdmin):
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content",)
     list_filter = ("category",)
 
     fieldsets = (
@@ -196,10 +190,7 @@ class TFQuestionAdminForm(forms.ModelForm):
 
 class TFQuestionAdmin(admin.ModelAdmin):
     form = TFQuestionAdminForm
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content",)
     list_filter = ("category",)
     fieldsets = (
         (
@@ -244,10 +235,7 @@ class EssayQuestionAdminForm(forms.ModelForm):
 
 class EssayQuestionAdmin(admin.ModelAdmin):
     form = EssayQuestionAdminForm
-    list_display = (
-        "content",
-        "category",
-    )
+    list_display = ("content",)
     list_filter = ("category",)
     fields = (
         "content",

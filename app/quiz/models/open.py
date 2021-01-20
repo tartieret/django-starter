@@ -59,7 +59,7 @@ class OpenQuestion(Question):
     class Meta:
         verbose_name = _("Open Question")
         verbose_name_plural = _("Open Questions")
-        ordering = ["category"]
+        # ordering = ["id"]
 
     def clean(self):
         try:

@@ -42,4 +42,4 @@ class TFQuestion(Question):
     class Meta:
         verbose_name = _("True/False Question")
         verbose_name_plural = _("True/False Questions")
-        ordering = ["category"]
+        # ordering = ["category"]
