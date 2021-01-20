@@ -77,15 +77,6 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-class SubCategoryAdmin(admin.ModelAdmin):
-    search_fields = ("name",)
-    list_display = (
-        "name",
-        "category",
-    )
-    list_filter = ("category",)
-
-
 class MCQuestionAdminForm(forms.ModelForm):
     content = forms.CharField(widget=CKEditorWidget())
 
@@ -103,14 +94,33 @@ class MCQuestionAdmin(admin.ModelAdmin):
     )
     list_filter = ("category",)
     form = MCQuestionAdminForm
-    fields = (
-        "content",
-        "category",
-        "figure",
-        "explanation",
-        "quiz",
-        "allow_multiple_answers",
-        "answer_order",
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("category",),
+            },
+        ),
+        (
+            "Add to quiz",
+            {
+                "classes": ("collapse",),
+                "fields": ("quiz",),
+            },
+        ),
+        (
+            "Question",
+            {
+                "fields": (
+                    "content",
+                    "figure",
+                    "explanation",
+                    "allow_multiple_answers",
+                    "answer_order",
+                )
+            },
+        ),
     )
 
     search_fields = ("content", "explanation")
@@ -125,6 +135,41 @@ class OpenQuestionAdmin(admin.ModelAdmin):
         "category",
     )
     list_filter = ("category",)
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("category",),
+            },
+        ),
+        (
+            "Add to quiz",
+            {
+                "classes": ("collapse",),
+                "fields": ("quiz",),
+            },
+        ),
+        (
+            "Question",
+            {
+                "fields": (
+                    "content",
+                    "figure",
+                    "explanation",
+                )
+            },
+        ),
+        (
+            "Answer",
+            {
+                "fields": (
+                    "answer",
+                    "answer_type",
+                )
+            },
+        ),
+    )
 
 
 class ProgressAdmin(admin.ModelAdmin):
@@ -156,13 +201,31 @@ class TFQuestionAdmin(admin.ModelAdmin):
         "category",
     )
     list_filter = ("category",)
-    fields = (
-        "content",
-        "category",
-        "figure",
-        "correct",
-        "explanation",
-        "quiz",
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("category",),
+            },
+        ),
+        (
+            "Add to quiz",
+            {
+                "classes": ("collapse",),
+                "fields": ("quiz",),
+            },
+        ),
+        (
+            "Question",
+            {
+                "fields": (
+                    "content",
+                    "figure",
+                    "correct",
+                    "explanation",
+                )
+            },
+        ),
     )
 
     search_fields = ("content", "explanation")
@@ -216,7 +279,6 @@ class SittingAdmin(admin.ModelAdmin):
 admin.site.register(Sitting, SittingAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(MCQuestion, MCQuestionAdmin)
 admin.site.register(OpenQuestion, OpenQuestionAdmin)
 admin.site.register(Progress, ProgressAdmin)
