@@ -71,7 +71,6 @@ class QuizAdmin(admin.ModelAdmin):
         "description",
         "category",
     )
-
     fieldsets = (
         (
             "Publish",
@@ -92,6 +91,7 @@ class QuizAdmin(admin.ModelAdmin):
                     "random_order",
                     "max_questions",
                     "single_attempt",
+                    "questions",
                 )
             },
         ),
@@ -116,7 +116,7 @@ class MCQuestionAdmin(admin.ModelAdmin):
     list_display = ("content",)
     list_filter = ("category",)
     form = MCQuestionAdminForm
-
+    filter_vertical = ("category",)
     fieldsets = (
         (
             None,
@@ -154,6 +154,7 @@ class MCQuestionAdmin(admin.ModelAdmin):
 class OpenQuestionAdmin(admin.ModelAdmin):
     list_display = ("content",)
     list_filter = ("category",)
+    filter_vertical = ("category",)
 
     fieldsets = (
         (
@@ -217,6 +218,7 @@ class TFQuestionAdmin(admin.ModelAdmin):
     form = TFQuestionAdminForm
     list_display = ("content",)
     list_filter = ("category",)
+    filter_vertical = ("category",)
     fieldsets = (
         (
             None,
