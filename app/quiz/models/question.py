@@ -35,6 +35,12 @@ class Question(models.Model):
         verbose_name=_("Explanation"),
     )
 
+    created_at = models.DateTimeField(
+        auto_now_add=True, help_text=_("Date of creation")
+    )
+
+    updated_at = models.DateTimeField(auto_now=True, help_text=_("Date of last update"))
+
     objects = InheritanceManager()
 
     class Meta:
