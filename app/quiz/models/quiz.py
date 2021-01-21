@@ -1,16 +1,30 @@
 import re
 
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
 from django.db import models
-from django.core.validators import (
-    MaxValueValidator,
-)
 from django.utils.translation import gettext_lazy as _
 
 from .category import Category
 
 
+class QuizType:
+    GENERAL = "general"
+    TOPIC = "topic"
+    MONTHLY = "monthly"
+
+    @staticmethod
+    def is_valid(value):
+        return value in [QuizType.GENERAL, QuizType.TOPIC, QuizType.MONTHLY]
+
+
 class Quiz(models.Model):
+
+    TYPES = (
+        (QuizType.GENERAL, _("General")),
+        (QuizType.TOPIC, _("Topic")),
+        (QuizType.MONTHLY, _("Monthly")),
+    )
 
     title = models.CharField(verbose_name=_("Title"), max_length=60, blank=False)
 
@@ -18,6 +32,10 @@ class Quiz(models.Model):
         verbose_name=_("Description"),
         blank=True,
         help_text=_("a description of the quiz"),
+    )
+
+    type = models.CharField(
+        _("Type"), max_length=10, choices=TYPES, default=QuizType.GENERAL
     )
 
     url = models.SlugField(

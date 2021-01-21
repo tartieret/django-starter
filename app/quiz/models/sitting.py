@@ -111,7 +111,9 @@ class Sitting(models.Model):
 
     quiz = models.ForeignKey(Quiz, verbose_name=_("Quiz"), on_delete=models.CASCADE)
 
-    mode = models.CharField(_("Mode"), max_length=10, choices=MODES, default="study")
+    mode = models.CharField(
+        _("Mode"), max_length=10, choices=MODES, default=SittingMode.STUDY
+    )
 
     question_order = models.CharField(
         max_length=1024,
@@ -263,10 +265,10 @@ class Sitting(models.Model):
 
     def get_unanswered_questions(self) -> list:
         """Return the list of unanswered questions
-        
+
         Returns:
             list: all question order ids that don't have an answer
-        
+
         """
         answers = json.loads(self.user_answers)
         unanswered = [i for i, answer in answers.items() if answer == "?"]
@@ -274,14 +276,13 @@ class Sitting(models.Model):
 
     def get_nb_unanswered_questions(self) -> int:
         """Get the number of unanswered questions
-        
+
         Returns:
             int: number of unanswered questions
-        
+
         """
         unanswered = self.get_unanswered_questions()
         return len(unanswered)
-
 
     def get_score_list(self) -> list:
         """Return a list of 0,1,? based on the fact that
