@@ -62,15 +62,8 @@ class QuizAdminForm(forms.ModelForm):
 class QuizAdmin(admin.ModelAdmin):
     form = QuizAdminForm
 
-    list_display = (
-        "title",
-        "type",
-        "category",
-    )
-    list_filter = (
-        "type",
-        "category",
-    )
+    list_display = ("title", "type", "category", "created_at", "updated_at")
+    list_filter = ("type", "category", "created_at", "updated_at")
     search_fields = (
         "title",
         "description",
@@ -119,8 +112,8 @@ class MCQuestionAdminForm(forms.ModelForm):
 
 
 class MCQuestionAdmin(admin.ModelAdmin):
-    list_display = ("content",)
-    list_filter = ("category",)
+    list_display = ("content", "created_at", "updated_at")
+    list_filter = ("category", "created_at", "updated_at")
     form = MCQuestionAdminForm
     filter_vertical = ("category",)
     fieldsets = (
@@ -157,8 +150,8 @@ class MCQuestionAdmin(admin.ModelAdmin):
 
 
 class OpenQuestionAdmin(admin.ModelAdmin):
-    list_display = ("content",)
-    list_filter = ("category",)
+    list_display = ("content", "created_at", "updated_at")
+    list_filter = ("category", "created_at", "updated_at")
     filter_vertical = ("category",)
 
     fieldsets = (
@@ -220,8 +213,8 @@ class TFQuestionAdminForm(forms.ModelForm):
 
 class TFQuestionAdmin(admin.ModelAdmin):
     form = TFQuestionAdminForm
-    list_display = ("content",)
-    list_filter = ("category",)
+    list_display = ("content", "created_at", "updated_at")
+    list_filter = ("category", "created_at", "updated_at")
     filter_vertical = ("category",)
     fieldsets = (
         (
@@ -265,8 +258,8 @@ class EssayQuestionAdminForm(forms.ModelForm):
 
 class EssayQuestionAdmin(admin.ModelAdmin):
     form = EssayQuestionAdminForm
-    list_display = ("content",)
-    list_filter = ("category",)
+    list_display = ("content", "created_at", "updated_at")
+    list_filter = ("category", "created_at", "updated_at")
     fields = (
         "content",
         "category",
