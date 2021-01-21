@@ -59,16 +59,46 @@ class QuizAdminForm(forms.ModelForm):
         return quiz
 
 
+class IsPublishedFilter(admin.SimpleListFilter):
+    title = "Status"
+    parameter_name = "is_published"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("Published", "Published"),
+            ("Draft", "Draft"),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        print(value)
+        if value == "Published":
+            return queryset.filter(draft=False)
+        elif value == "Draft":
+            return queryset.filter(draft=True)
+
+        return queryset
+
+
 class QuizAdmin(admin.ModelAdmin):
     form = QuizAdminForm
 
-    list_display = ("title", "type", "category", "created_at", "updated_at")
-    list_filter = ("type", "category", "created_at", "updated_at")
-    search_fields = (
+    list_display = (
         "title",
-        "description",
+        "type",
         "category",
+        "is_published",
+        "created_at",
+        "updated_at",
     )
+    list_filter = (
+        "type",
+        IsPublishedFilter,
+        "category",
+        "created_at",
+        "updated_at",
+    )
+    search_fields = ("title", "description", "category", "created_at")
     fieldsets = (
         (
             "Publish",
@@ -95,6 +125,17 @@ class QuizAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+    def is_published(self, obj) -> bool:
+        """Boolean flag defining if the quiz is published or not
+
+        Returns:
+            bool: True if the quiz is published
+
+        """
+        return not obj.draft
+
+    is_published.boolean = True
 
 
 class CategoryAdmin(admin.ModelAdmin):
