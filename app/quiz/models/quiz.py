@@ -121,6 +121,12 @@ class Quiz(models.Model):
         ),
     )
 
+    created_at = models.DateTimeField(
+        auto_now_add=True, help_text=_("Date of creation")
+    )
+
+    updated_at = models.DateTimeField(auto_now=True, help_text=_("Date of last update"))
+
     def clean(self):
         if self.type == QuizType.TOPIC and self.category is None:
             raise ValidationError(
