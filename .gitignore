@@ -65,6 +65,7 @@ coverage.xml
 
 # Django stuff:
 staticfiles/
+media/
 
 # Sphinx documentation
 docs/_build/

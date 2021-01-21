@@ -83,6 +83,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "captcha",
     "ckeditor",
+    "ckeditor_uploader",
 ]
 
 LOCAL_APPS = [
@@ -168,7 +169,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(APPS_DIR / "media")
+MEDIA_ROOT = str(ROOT_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -305,3 +306,55 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # ------------------------------------------------------------------------------
 
 CKEDITOR_BASEPATH = STATIC_URL + "ckeditor/ckeditor/"
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    "default": {
+        "skin": "moono-lisa",
+        "toolbar_Basic": [["Source", "-", "Bold", "Italic"]],
+        "toolbar_Full": [
+            [
+                "Styles",
+                "Format",
+                "Bold",
+                "Italic",
+                "Underline",
+                "Strike",
+                "SpellChecker",
+                "Undo",
+                "Redo",
+                "uploadimage",
+                "uploadwidget",
+            ],
+            ["Link", "Unlink", "Anchor"],
+            ["Image", "Table", "HorizontalRule"],
+            ["TextColor", "BGColor"],
+            ["Smiley", "SpecialChar"],
+            ["Source"],
+        ],
+        "toolbar": "Full",
+        "height": 291,
+        "width": 835,
+        "filebrowserWindowWidth": 940,
+        "filebrowserWindowHeight": 725,
+        "disableNativeSpellChecker": False,
+        "extraPlugins": ",".join(
+            [
+                "uploadimage",  # the upload image feature
+                # your extra plugins here
+                "div",
+                "autolink",
+                "autoembed",
+                "embedsemantic",
+                "autogrow",
+                # 'devtools',
+                "widget",
+                "lineutils",
+                "clipboard",
+                "dialog",
+                "dialogui",
+                "elementspath",
+            ]
+        ),
+    }
+}
