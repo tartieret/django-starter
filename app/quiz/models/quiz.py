@@ -121,6 +121,12 @@ class Quiz(models.Model):
         ),
     )
 
+    def clean(self):
+        if self.type == QuizType.TOPIC and self.category is None:
+            raise ValidationError(
+                {"category": _('A "topic" quiz should have a category')}
+            )
+
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         self.url = re.sub(r"\s+", "-", self.url).lower()
 

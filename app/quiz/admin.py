@@ -64,10 +64,15 @@ class QuizAdmin(admin.ModelAdmin):
 
     list_display = (
         "title",
+        "type",
         "category",
     )
-    list_filter = ("category",)
+    list_filter = (
+        "type",
+        "category",
+    )
     search_fields = (
+        "title",
         "description",
         "category",
     )
@@ -76,6 +81,7 @@ class QuizAdmin(admin.ModelAdmin):
             "Publish",
             {
                 "fields": (
+                    "type",
                     "category",
                     "draft",
                     "url",
